@@ -7,7 +7,7 @@ export default {
   fields: [
     {
       name: 'id',
-      title:'ID',
+      title: 'ID',
       type: 'string',
       initialValue: () => uuidv4(),
     },
@@ -21,7 +21,7 @@ export default {
       name: 'addedBy',
       title: 'Adicionado por',
       type: 'reference',
-      to: [{type: 'vetUser'}],
+      to: [{type: 'login'}],
     },
     {
       name: 'card',
@@ -34,8 +34,8 @@ export default {
     {
       name: 'createVoucher',
       mutation: async (args, context) => {
-        const { document } = args
-        const { id } = document
+        const {document} = args
+        const {id} = document
         const uuid = uuidv4()
         await client.patch(id).set('id', uuid).commit()
         return {...document, id: uuid}

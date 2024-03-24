@@ -23,6 +23,12 @@ export default {
       title: 'Foto de perfil',
       type: 'image',
     },
+    {
+      name: 'login',
+      title: 'Login',
+      type: 'reference',
+      to: [{type: 'login'}],
+    },
   ],
 }
 

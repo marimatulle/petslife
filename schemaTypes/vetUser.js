@@ -23,7 +23,11 @@ export default {
       title: 'Foto de perfil',
       type: 'image',
     },
+    {
+      name: 'login',
+      title: 'Login',
+      type: 'reference',
+      to: [{type: 'login'}],
+    },
   ],
 }
-
-// talvez objeto senha e objeto crmv venha aqui depois

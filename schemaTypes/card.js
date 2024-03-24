@@ -42,7 +42,7 @@ export default {
       name: 'createdBy',
       title: 'Criado por',
       type: 'reference',
-      to: [{type: 'commonUser'}],
+      to: [{type: 'login'}],
     },
   ],
 }
