@@ -58,7 +58,7 @@ const Login = () => {
       </div>
       <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center bg-gray-200">
         <PetsSVG
-          alt="Imagem de um gato e um cachorro"
+          alt="Imagem de um cachorro e um gato"
           className=""
         />
       </div>
