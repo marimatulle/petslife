@@ -1,10 +1,10 @@
 import React from "react";
-import { ReactComponent as AstromeowSVG } from "../assets/astromeow.svg";
+import { ReactComponent as PetsSVG } from "../assets/cat-and-dog.svg";
 import { ReactComponent as GmailSVG } from "../assets/gmail-google.svg";
 
 const Login = () => {
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full min-h-screen">
       <div className="w-full flex items-center justify-center lg:w-1/2">
         <div className="bg-white px-10 py-20 rounded-3xl border-2 border-gray-200">
           <h1 className="text-5xl font-semibold">Bem-vindo de volta!</h1>
@@ -50,15 +50,15 @@ const Login = () => {
             <div className="mt-8 flex justify-center items-center">
               <p className="fonte-medium text-base">Ainda não tem uma conta?</p>
               <button className="text-orange-400 text-base font-medium ml-2">
-                Registre-se
+                Cadastre-se
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div className="hidden relative lg:flex h-full w-1/2 items-center justify-center bg-gray-200">
-        <AstromeowSVG
-          alt="Astromeow gato astronauta imagem"
+      <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center bg-gray-200">
+        <PetsSVG
+          alt="Imagem de um gato e um cachorro"
           className=""
         />
       </div>
