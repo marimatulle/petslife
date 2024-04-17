@@ -53,7 +53,7 @@ const Register = () => {
         </div>
       )}
       {userType && (
-        <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center bg-gray-200">
+        <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center">
           {userType === "veterinario" ? (
             <VetUserSVG
               alt="Imagem de um veterinário cuidando de um cachorro"

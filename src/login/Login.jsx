@@ -56,7 +56,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center bg-gray-200">
+      <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-cente">
         <PetsSVG
           alt="Imagem de um cachorro e um gato"
           className=""
