@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
 import { ReactComponent as CommonUserSVG } from "../assets/pet-owners.svg";
 
@@ -112,9 +113,12 @@ const Register = () => {
               </div>
               <div className="mt-8 flex justify-center items-center">
                 <p className="fonte-medium text-base">Já possui uma conta?</p>
-                <button className="text-orange-400 text-base font-medium ml-2">
+                <Link
+                  to="/login"
+                  className="text-orange-400 text-base font-medium ml-2"
+                >
                   Ir para login
-                </button>
+                </Link>
               </div>
             </div>
           </div>

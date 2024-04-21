@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as PetsSVG } from "../assets/cat-and-dog.svg";
 import { ReactComponent as GmailSVG } from "../assets/gmail-google.svg";
 
@@ -30,7 +31,7 @@ const Login = () => {
             <div className="mt-8 flex justify-between items-center">
               <div>
                 <input type="checkbox" id="remember" />
-                <label className="ml-2 font-medium text-base" for="remember">
+                <label className="ml-2 font-medium text-base" htmlFor="remember">
                   Lembre-se de mim
                 </label>
               </div>
@@ -49,18 +50,18 @@ const Login = () => {
             </div>
             <div className="mt-8 flex justify-center items-center">
               <p className="fonte-medium text-base">Ainda não tem uma conta?</p>
-              <button className="text-orange-400 text-base font-medium ml-2">
+              <Link
+                to="/register"
+                className="text-orange-400 text-base font-medium ml-2"
+              >
                 Cadastre-se
-              </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
       <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-cente">
-        <PetsSVG
-          alt="Imagem de um cachorro e um gato"
-          className=""
-        />
+        <PetsSVG alt="Imagem de um cachorro e um gato" className="" />
       </div>
     </div>
   );
