@@ -33,21 +33,13 @@ const Register = () => {
         <div className="flex flex-col items-center">
           <button
             onClick={() => handleUserTypeChange("veterinario")}
-            className={`${
-              userType === "veterinario"
-                ? "bg-orange-400 text-white"
-                : "bg-gray-300 text-gray-700"
-            } active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl text-lg font-bold mb-4`}
+            className="bg-gray-300 text-gray-700 hover:bg-orange-400 hover:text-white active:bg-orange-400 active:text-white active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold mb-4 w-[200px]"
           >
             Sou Veterinário
           </button>
           <button
             onClick={() => handleUserTypeChange("tutor")}
-            className={`${
-              userType === "tutor"
-                ? "bg-orange-400 text-white"
-                : "bg-gray-300 text-gray-700"
-            } active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl text-lg font-bold`}
+            className="bg-gray-300 text-gray-700 hover:bg-orange-400 hover:text-white active:bg-orange-400 active:text-white active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold w-[200px]"
           >
             Sou Tutor
           </button>
@@ -56,15 +48,9 @@ const Register = () => {
       {userType && (
         <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center">
           {userType === "veterinario" ? (
-            <VetUserSVG
-              alt="Imagem de um veterinário cuidando de um cachorro"
-              className=""
-            />
+            <VetUserSVG alt="Imagem de um veterinário cuidando de um cachorro" />
           ) : (
-            <CommonUserSVG
-              alt="Imagem de uma família passeando com seu cachorro"
-              className=""
-            />
+            <CommonUserSVG alt="Imagem de uma família passeando com seu cachorro" />
           )}
         </div>
       )}
