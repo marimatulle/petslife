@@ -1,11 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
 import { ReactComponent as CommonUserSVG } from "../assets/pet-owners.svg";
+import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
 
 const Register = () => {
-  const [userType, setUserType] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [crmv, setCrmv] = useState("");
+  const [userType, setUserType] = useState("");
   const [showButtons, setShowButtons] = useState(true);
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password)
+      const user = auth.currentUser;
+      console.log(user);
+      console.log("Usuário registrado")
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handleUserTypeChange = (type) => {
     setUserType(type);
@@ -20,6 +39,8 @@ const Register = () => {
           <input
             className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
             placeholder="Digite seu CRMV"
+            onChange={(e) => setCrmv(e.target.value)}
+            required
           />
         </div>
       );
@@ -61,19 +82,14 @@ const Register = () => {
             <p className="font-medium text-lg text-gray-500 mt-4">
               Preencha o formulário abaixo para se cadastrar no Petslife.
             </p>
-            <div className="mt-8">
+            <form onSubmit={handleRegister} className="mt-8">
               <div>
                 <label className="text-lg font-medium">Nome completo:</label>
                 <input
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   placeholder="Digite seu nome completo"
-                />
-              </div>
-              <div>
-                <label className="text-lg font-medium">Nome de usuário:</label>
-                <input
-                  className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  placeholder="Digite seu nome de usuário"
+                  onChange={(e) => setName(e.target.value)}
+                  required
                 />
               </div>
               <div>
@@ -81,6 +97,8 @@ const Register = () => {
                 <input
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   placeholder="Digite seu email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
               <div>
@@ -89,11 +107,16 @@ const Register = () => {
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   placeholder="Digite sua senha"
                   type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
               {renderForm()}
               <div className="mt-8 flex flex-col gap-y-4">
-                <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold">
+                <button
+                  type="submit"
+                  className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold"
+                >
                   Cadastrar
                 </button>
               </div>
@@ -106,7 +129,7 @@ const Register = () => {
                   Ir para login
                 </Link>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}
