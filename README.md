@@ -12,8 +12,8 @@ O objetivo principal do projeto é facilitar a vida dos donos de pet e veteriná
 - O sistema permite o cadastro e login de dois tipos de usuários: donos de pets e veterinários;
 - No cadastro são exibidos dois botões, aonde será selecionado entre "Sou Veterinário" ou "Sou Tutor";
 - Se selecionado "Sou Veterinário", obrigatoriamente precisará ser preenchido o CRMV no formulário de cadastro.
-2) Página do Usuário:
-- Ambos usuários têm acesso à página do usuário, onde podem:
+2) Perfil:
+- Ambos usuários têm acesso ao perfil, onde podem:
   - Alterar a foto de perfil e a foto de capa;
   - Visualizar o nome completo, username e, no caso de veterinários, o CRMV;
   - Adicionar outros usuários (donos de pet ou veterinários);
@@ -27,11 +27,15 @@ O objetivo principal do projeto é facilitar a vida dos donos de pet e veteriná
     - Raça;
     - Breve descrição;
     - Foto do pet.
-  - Os donos de pet não podem fazer upload dos comprovantes de vacinação.
+  - Os donos de pets não podem fazer upload dos comprovantes de vacinação.
 - Para usuários veterinários:
   - Na página de carteiras, aparecem apenas as carteiras dos pets que eles atendem;
   - O veterinário pode fazer upload dos comprovantes de vacinação.
 - Ambos os usuários possuem um search para pesquisar o pet pelo nome.
+4) Amigos:
+- Ambos os usuários têm sua página de amigos, onde ficam as pessoas adicionadas;
+- Na página de amigos pode ser desfeita a amizade com outro usuário e também pode acessar e visualizar o perfil de outro usuário;
+- O intuito é de veterinários e donos de pets se conectarem, para assim o veterinário conseguir fazer upload dos comprovantes na carteira do pet, mas caso um dono de pet queira ter outro dono de pet adicionado ele poderá.
 ## Utilização:
 1) Acesse o site e faça o cadastro;
 2) Faça o login com suas credenciais;
