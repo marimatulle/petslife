@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Login from './login/Login';
 import Register from './register/Register';
-import Home from './home/Home';
+import UserPage from './userPage/UserPage';
 import Cards from './cards/Cards';
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/userpage" element={<UserPage />} />
           <Route path="/cards" element={<Cards />} />
         </Routes>
       <ToastContainer />
