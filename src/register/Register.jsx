@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, database } from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-import { ReactComponent as CommonUserSVG } from "../assets/pet-owners.svg";
-import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
+import { ReactComponent as RegularUserSVG } from "../assets/pet-owners.svg";
+import { ReactComponent as VeterinarianSVG } from "../assets/vet.svg";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -20,17 +20,25 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
+      await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
       if (user) {
-        await setDoc(doc(database, "Users", user.uid), {
+        const userDocRef = doc(
+          database,
+          userType === "veterinario" ? "Veterinarians" : "RegularUsers",
+          user.uid
+        );
+        const userData = {
           email: user.email,
           name: fullName,
           username: username,
-          crmv: crmv
-        });
+        };
+        if (userType === "veterinario") {
+          userData.crmv = crmv;
+        }
+        await setDoc(userDocRef, userData);
       }
-      toast.success("Usuário cadastrado com sucesso!", {
+      toast.success("Cadastrado com sucesso!", {
         position: "top-center",
       });
     } catch (error) {
@@ -84,9 +92,9 @@ const Register = () => {
       {userType && (
         <div className="hidden relative lg:flex min-h-screen w-1/2 items-center justify-center">
           {userType === "veterinario" ? (
-            <VetUserSVG alt="Imagem de um veterinário cuidando de um cachorro" />
+            <VeterinarianSVG alt="Imagem de um veterinário cuidando de um cachorro" />
           ) : (
-            <CommonUserSVG alt="Imagem de uma família passeando com seu cachorro" />
+            <RegularUserSVG alt="Imagem de uma família passeando com seu cachorro" />
           )}
         </div>
       )}
