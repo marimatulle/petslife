@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, database } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { toast } from 'react-toastify';
 
 import { ReactComponent as CommonUserSVG } from "../assets/pet-owners.svg";
 import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
@@ -9,7 +11,8 @@ import { ReactComponent as VetUserSVG } from "../assets/vet.svg";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [crmv, setCrmv] = useState("");
   const [userType, setUserType] = useState("");
   const [showButtons, setShowButtons] = useState(true);
@@ -19,10 +22,22 @@ const Register = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password)
       const user = auth.currentUser;
-      console.log(user);
-      console.log("Usuário registrado")
+      if (user) {
+        await setDoc(doc(database, "Users", user.uid), {
+          email: user.email,
+          name: fullName,
+          username: username,
+          crmv: crmv
+        });
+      }
+      toast.success("Usuário cadastrado com sucesso!", {
+        position: "top-center",
+      });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
+      toast.error(error.message, {
+        position: "bottom-center",
+      });
     }
   };
 
@@ -88,7 +103,16 @@ const Register = () => {
                 <input
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   placeholder="Digite seu nome completo"
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-lg font-medium">Nome de usuário:</label>
+                <input
+                  className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+                  placeholder="Digite seu nome de usuário"
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
