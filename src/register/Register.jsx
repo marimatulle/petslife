@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, database } from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
@@ -9,6 +9,7 @@ import { ReactComponent as RegularUserSVG } from "../assets/pet-owners.svg";
 import { ReactComponent as VeterinarianSVG } from "../assets/vet.svg";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -37,10 +38,16 @@ const Register = () => {
           userData.crmv = crmv;
         }
         await setDoc(userDocRef, userData);
+        if (userType === "veterinario") {
+        }
+        navigate("/login");
       }
-      toast.success("Cadastrado com sucesso!", {
-        position: "top-center",
-      });
+      toast.success(
+        "Cadastrado com sucesso!",
+        {
+          position: "top-center",
+        }
+      );
     } catch (error) {
       console.error(error.message);
       toast.error(error.message, {
