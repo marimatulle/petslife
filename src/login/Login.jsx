@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleAuth } from "../firebase";
 import { toast } from "react-toastify";
 
 import { ReactComponent as PetsSVG } from "../assets/cat-and-dog.svg";
@@ -15,6 +15,21 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "/profile";
+      toast.success("Logado com sucesso!", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.message, {
+        position: "bottom-center",
+      });
+    }
+  };
+
+  const handleGoogleSubmit = async () => {
+    try {
+      await signInWithPopup(auth, googleAuth);
       window.location.href = "/profile";
       toast.success("Logado com sucesso!", {
         position: "top-center",
@@ -61,7 +76,7 @@ const Login = () => {
                 <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold">
                   Entrar
                 </button>
-                <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl flex border-2 border-gray-100 items-center justify-center text-lg">
+                <button onClick={handleGoogleSubmit} className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl flex border-2 border-gray-100 items-center justify-center text-lg">
                   <GmailSVG alt="Gmail logo" className="w-6 h-6 mr-2" />
                   Entrar com Google
                 </button>
