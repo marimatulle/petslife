@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, googleAuth } from "../firebase";
+import { auth, googleAuth, database } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 import { ReactComponent as PetsSVG } from "../assets/cat-and-dog.svg";
 import { ReactComponent as GmailSVG } from "../assets/gmail-google.svg";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "/profile";
+      navigate("/profile")
       toast.success("Logado com sucesso!", {
         position: "top-center",
       });
@@ -29,8 +31,14 @@ const Login = () => {
 
   const handleGoogleSubmit = async () => {
     try {
-      await signInWithPopup(auth, googleAuth);
-      window.location.href = "/profile";
+      const result = await signInWithPopup(auth, googleAuth);
+      const user = result.user;
+      const userDocRef = doc(database, "GoogleRegularUsers", user.uid);
+      await setDoc(userDocRef, {
+        email: user.email,
+        fullName: user.displayName,
+      });
+      navigate("/profile")
       toast.success("Logado com sucesso!", {
         position: "top-center",
       });
