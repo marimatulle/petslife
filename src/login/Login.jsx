@@ -84,7 +84,7 @@ const Login = () => {
                 <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold">
                   Entrar
                 </button>
-                <button onClick={handleGoogleSubmit} className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl flex border-2 border-gray-100 items-center justify-center text-lg">
+                <button type="button" onClick={handleGoogleSubmit} className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl flex border-2 border-gray-100 items-center justify-center text-lg">
                   <GmailSVG alt="Gmail logo" className="w-6 h-6 mr-2" />
                   Entrar com Google
                 </button>
