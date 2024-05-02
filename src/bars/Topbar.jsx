@@ -1,29 +1,39 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaPaw, FaSignOutAlt } from "react-icons/fa";
-import logo from "../assets/PETSLIFE.png";
+import { toast } from "react-toastify";
 
 const Topbar = ({ location }) => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    navigate("/login");
+    toast.success("Logout feito com sucesso", {
+      position: "top-center",
+    });
+  };
+
   return (
     <div className="bg-white p-4 flex justify-between items-center">
       <Navbar />
-      <img src={logo} alt="Logo" className="h-20 ml-60 mr-60" />
-      <div>
+      <div className="flex items-center">
         {location === "/cards" ? (
           <Link to="/profile">
-            <button className="mr-8 text-gray-500 text-2xl">
+            <button className="mr-8 text-gray-500 text-2xl flex items-center">
               <FaUserCircle />
             </button>
           </Link>
         ) : (
           <Link to="/cards">
-            <button className="mr-8 text-gray-500 text-2xl">
+            <button className="mr-8 text-gray-500 text-2xl flex items-center">
               <FaPaw />
             </button>
           </Link>
         )}
-        <button className="mr-8 text-gray-500 text-2xl">
+        <button
+          onClick={handleLogout}
+          className="mr-4 text-gray-500 text-2xl flex items-center"
+        >
           <FaSignOutAlt />
         </button>
       </div>
