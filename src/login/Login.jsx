@@ -23,7 +23,7 @@ const Login = () => {
       });
     } catch (error) {
       console.error(error.message);
-      toast.error(error.message, {
+      toast.error("Email ou senha incorretos.", {
         position: "bottom-center",
       });
     }
@@ -44,9 +44,6 @@ const Login = () => {
       });
     } catch (error) {
       console.error(error.message);
-      toast.error(error.message, {
-        position: "bottom-center",
-      });
     }
   };
 
