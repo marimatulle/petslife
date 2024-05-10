@@ -14,10 +14,10 @@ O objetivo principal do projeto é facilitar a vida dos donos de pet e veteriná
 - Se selecionado "Sou Veterinário", obrigatoriamente precisará ser preenchido o CRMV no formulário de cadastro.
 2) Perfil:
 - Ambos usuários têm acesso ao perfil, onde podem:
-  - Alterar a foto de perfil e a foto de capa;
+  - Alterar a foto de perfil;
   - Visualizar o nome completo, username e, no caso de veterinários, o CRMV;
-  - Adicionar outros usuários (donos de pet ou veterinários);
-  - O botão de logout fica na página do usuário.
+  - Adicionar outros usuários (donos de pets ou veterinários);
+  - O botão de logout, o botão que leva até as carteiras e o search de usuários ficam no topo da página.
 3) Carteira de Vacinação:
 - Para usuários donos de pet:
   - Existe um botão "+" para criar uma nova carteira;
