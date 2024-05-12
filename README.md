@@ -4,7 +4,7 @@ O projeto consiste em uma carteira de vacinação virtual para pets, que visa fa
 ## Objetivo:
 O objetivo principal do projeto é facilitar a vida dos donos de pet e veterinários, tendo a carteira de vacinação em qualquer lugar, sem precisar ficar levando papéis e assim facilitando também o controle e o acesso as informações de saúde do animal.
 ## Tecnologias utilizadas:
-- React.js
+- ReactJS
 - Tailwind CSS
 - Firebase
 ## Funcionalidades:
