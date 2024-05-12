@@ -1,7 +1,7 @@
 import React from "react";
 
-const Friends = () => {
+const FriendsModal = () => {
   return <div>Friends</div>;
 };
 
-export default Friends;
+export default FriendsModal;

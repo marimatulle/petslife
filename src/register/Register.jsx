@@ -84,13 +84,13 @@ const Register = () => {
         <div className="flex flex-col items-center">
           <button
             onClick={() => handleUserTypeChange("veterinario")}
-            className="bg-gray-300 text-gray-700 hover:bg-orange-400 hover:text-white active:bg-orange-400 active:text-white active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold mb-4 w-[200px]"
+            className="bg-orange-300 text-white hover:bg-orange-400 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold mb-4 w-[200px]"
           >
             Sou Veterinário
           </button>
           <button
             onClick={() => handleUserTypeChange("tutor")}
-            className="bg-gray-300 text-gray-700 hover:bg-orange-400 hover:text-white active:bg-orange-400 active:text-white active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold w-[200px]"
+            className="bg-orange-300 text-white hover:bg-orange-400 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-4 px-6 rounded-xl text-xl font-bold w-[200px]"
           >
             Sou Tutor
           </button>
