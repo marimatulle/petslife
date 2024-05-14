@@ -17,20 +17,19 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        let docRef = doc(database, "RegularUsers", user.uid);
-        let docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUser(docSnap.data());
-        } else {
-          docRef = doc(database, "Veterinarians", user.uid);
-          docSnap = await getDoc(docRef);
+      auth.onAuthStateChanged(async (user) => {
+          let docRef = doc(database, "RegularUsers", user.uid);
+          let docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setUser(docSnap.data());
+          } else {
+            docRef = doc(database, "Veterinarians", user.uid);
+            docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              setUser(docSnap.data());
+            }
           }
-        }
-      }
+      })
     };
 
     fetchUser();
