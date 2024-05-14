@@ -1,7 +1,7 @@
 import React from "react";
 import { IoClose } from "react-icons/io5";
 
-const FriendsModal = ({ onClose }) => {
+const CreateCardsModal = ({ onClose }) => {
   return (
     <div
       className="fixed z-10 inset-0 overflow-y-auto"
@@ -17,8 +17,7 @@ const FriendsModal = ({ onClose }) => {
         <span
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
-        >
-        </span>
+        ></span>
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
@@ -27,9 +26,14 @@ const FriendsModal = ({ onClose }) => {
                   className="text-lg leading-6 font-bold text-gray-900"
                   id="modal-title"
                 >
-                  Lista de Amigos:
+                  escrever algo aqui blablabla
                 </h3>
               </div>
+
+
+
+
+              
               <button
                 onClick={onClose}
                 className="absolute top-0 right-0 m-2 bg-red-500 hover:bg-red-600 text-white rounded w-8 h-8 flex items-center justify-center"
@@ -44,4 +48,4 @@ const FriendsModal = ({ onClose }) => {
   );
 };
 
-export default FriendsModal;
+export default CreateCardsModal;
