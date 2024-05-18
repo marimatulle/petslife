@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaExclamationCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = (event) => {
     if (event.key === "Enter") {
       navigate(`/search?query=${searchTerm}`);
     }
+  };
+
+  const handleFocus = () => {
+    setShowWarning(true);
+  };
+
+  const handleBlur = () => {
+    setShowWarning(false);
   };
 
   return (
@@ -22,7 +31,15 @@ const Navbar = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyPress={handleSearch}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
+      {showWarning && (
+        <div className="absolute left-2 top-12 mt-2 p-2 text-yellow-500 flex items-center space-x-2">
+          <FaExclamationCircle />
+          <span>Busque pelo nome de usuário</span>
+        </div>
+      )}
     </div>
   );
 };

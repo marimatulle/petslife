@@ -14,7 +14,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="bg-white p-4 flex justify-between items-center">
+    <div className="bg-white p-6 flex justify-between items-center">
       <Navbar />
       <div className="flex items-center">
         <Link to="/cards">
