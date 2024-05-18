@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../bars/Topbar";
-import FriendsModal from './FriendsModal';
+import FriendsModal from "./FriendsModal";
+import FollowersModal from "./FollowersModal";
 import { auth, database, storage } from "../firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -13,23 +14,24 @@ const Profile = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showFriendsModal, setShowFriendsModal] = useState(false);
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       auth.onAuthStateChanged(async (user) => {
-          let docRef = doc(database, "RegularUsers", user.uid);
-          let docSnap = await getDoc(docRef);
+        let docRef = doc(database, "RegularUsers", user.uid);
+        let docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUser(docSnap.data());
+        } else {
+          docRef = doc(database, "Veterinarians", user.uid);
+          docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setUser(docSnap.data());
-          } else {
-            docRef = doc(database, "Veterinarians", user.uid);
-            docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-              setUser(docSnap.data());
-            }
           }
-      })
+        }
+      });
     };
 
     fetchUser();
@@ -49,7 +51,7 @@ const Profile = () => {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => { },
         (error) => {
           console.error(error);
           setIsLoading(false);
@@ -115,18 +117,26 @@ const Profile = () => {
             {user?.username}
             {user?.crmv ? ` (CRMV: ${user?.crmv})` : ""}
           </p>
-          <div className="flex items-center justify-center mt-4">
+          <div className="flex items-center justify-center mt-4 space-x-4">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowFriendsModal(true)}
               className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
-              active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
             >
               Amigos
+            </button>
+            <button
+              onClick={() => setShowFollowersModal(true)}
+              className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
+                active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+            >
+              Seguidores
             </button>
           </div>
         </div>
       </div>
-      {showModal && <FriendsModal onClose={() => setShowModal(false)} />}{" "}
+      {showFriendsModal && <FriendsModal onClose={() => setShowFriendsModal(false)} />}{" "}
+      {showFollowersModal && <FollowersModal onClose={() => setShowFollowersModal(false)} />}{" "}
     </div>
   );
 };
