@@ -27,7 +27,7 @@ const FriendsModal = ({ onClose }) => {
                   className="text-lg leading-6 font-bold text-gray-900"
                   id="modal-title"
                 >
-                  Lista de Amigos:
+                  Amigos:
                 </h3>
               </div>
               <button
