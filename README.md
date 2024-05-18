@@ -16,7 +16,8 @@ O objetivo principal do projeto é facilitar a vida dos donos de pet e veteriná
 - Ambos usuários têm acesso ao perfil, onde podem:
   - Alterar a foto de perfil;
   - Visualizar o nome completo, username e, no caso de veterinários, o CRMV;
-  - Adicionar outros usuários (donos de pets ou veterinários);
+  - Adicionar outros usuários
+  - Seguir pessoas
   - O botão de logout, o botão que leva até as carteiras e o search de usuários ficam no topo da página.
 3) Carteira de Vacinação:
 - Para usuários donos de pet:
@@ -32,10 +33,10 @@ O objetivo principal do projeto é facilitar a vida dos donos de pet e veteriná
   - Na página de carteiras, aparecem apenas as carteiras dos pets que eles atendem;
   - O veterinário pode fazer upload dos comprovantes de vacinação.
 - Ambos os usuários possuem um search para pesquisar o pet pelo nome.
-4) Amigos:
-- Ambos os usuários têm sua página de amigos, onde ficam as pessoas adicionadas;
-- Na página de amigos pode ser desfeita a amizade com outro usuário e também pode acessar e visualizar o perfil de outro usuário;
-- O intuito é de veterinários e donos de pets se conectarem, para assim o veterinário conseguir fazer upload dos comprovantes na carteira do pet, mas caso um dono de pet queira ter outro dono de pet adicionado ele poderá.
+4) Amigos e Seguidores:
+- Ambos os usuários têm sua página de amigos e seguidores, onde ficam as pessoas adicionadas e seus seguidores;
+- No perfil de um usuário pesquisado, pode ser desfeita a amizade ou enviada uma solicitação de amizade (no caso de veterinário se conectando com dono de pet ou vice versa), no caso de veterinário se conectando com outro veterinário ou dono de pet se conectando com outro dono de pet, eles apenas poderão se seguir;
+- O intuito é de veterinários e donos de pets se conectarem, para assim o veterinário conseguir fazer upload dos comprovantes na carteira do pet, mas caso você que possui carteirinhas para seu pet e seu amigo que também possui queiram se conectar vocês podem através do botão seguir.
 ## Utilização:
 1) Acesse o site e faça o cadastro;
 2) Faça o login com suas credenciais;
