@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { database } from "../firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import Topbar from "../bars/Topbar";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -23,21 +24,12 @@ const Search = () => {
         collectionRef,
         where("username", "==", searchTerm)
       );
-      const usersQueryByName = query(
-        collectionRef,
-        where("name", "==", searchTerm)
-      );
       const usersQuerySnapshotByUsername = await getDocs(usersQueryByUsername);
-      const usersQuerySnapshotByName = await getDocs(usersQueryByName);
       const usersByUsername = usersQuerySnapshotByUsername.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      const usersByName = usersQuerySnapshotByName.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return [...usersByUsername, ...usersByName];
+      return [...usersByUsername];
     };
 
     const regularUsers = await fetchUsersFromCollection(regularUsersRef);
@@ -51,7 +43,8 @@ const Search = () => {
   }, [fetchUsers]);
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
+      <Topbar location="/search" />
       <InfiniteScroll
         dataLength={users.length}
         next={fetchUsers}

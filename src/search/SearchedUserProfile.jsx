@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { database, auth } from "../firebase";
+import Topbar from "../bars/Topbar";
 
 const SearchedUserProfile = () => {
   const { userId } = useParams();
@@ -52,7 +53,6 @@ const SearchedUserProfile = () => {
       (user?.crmv && currentUser?.crmv) ||
       (!user?.crmv && !currentUser?.crmv)
     ) {
-      // Both users are Veterinarians or both are RegularUsers, they can only follow each other
       return;
     }
 
@@ -89,7 +89,8 @@ const SearchedUserProfile = () => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
+      <Topbar location="/userprofile/:userId" />
       <p>{user?.username}</p>
       <p>{user?.name}</p>
       {friendshipStatus === "pending" ? (

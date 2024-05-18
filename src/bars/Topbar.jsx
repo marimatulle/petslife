@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaPaw, FaSignOutAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const Topbar = ({ location }) => {
+const Topbar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     navigate("/login");
@@ -17,19 +17,16 @@ const Topbar = ({ location }) => {
     <div className="bg-white p-4 flex justify-between items-center">
       <Navbar />
       <div className="flex items-center">
-        {location === "/cards" ? (
-          <Link to="/profile">
-            <button className="mr-8 text-gray-500 text-2xl flex items-center">
-              <FaUserCircle />
-            </button>
-          </Link>
-        ) : (
-          <Link to="/cards">
-            <button className="mr-8 text-gray-500 text-2xl flex items-center">
-              <FaPaw />
-            </button>
-          </Link>
-        )}
+        <Link to="/cards">
+          <button className="mr-8 text-gray-500 text-2xl flex items-center">
+            <FaPaw />
+          </button>
+        </Link>
+        <Link to="/profile">
+          <button className="mr-8 text-gray-500 text-2xl flex items-center">
+            <FaUserCircle />
+          </button>
+        </Link>
         <button
           onClick={handleLogout}
           className="mr-4 text-gray-500 text-2xl flex items-center"
