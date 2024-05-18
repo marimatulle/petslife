@@ -12,6 +12,8 @@ import Login from "./login/Login";
 import Register from "./register/Register";
 import Profile from "./profile/Profile";
 import Cards from "./cards/Cards";
+import Search from "./search/Search";
+import SearchedUserProfile from "./search/SearchedUserProfile";
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cards" element={<Cards />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/userprofile/:userId" element={<SearchedUserProfile />} />
       </Routes>
       <ToastContainer />
     </div>
