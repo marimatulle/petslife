@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../bars/Topbar";
 import FriendsModal from "./FriendsModal";
-import FollowersModal from "./FollowersModal";
 import { auth, database, storage } from "../firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -15,7 +14,6 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFriendsModal, setShowFriendsModal] = useState(false);
-  const [showFollowersModal, setShowFollowersModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -125,18 +123,10 @@ const Profile = () => {
             >
               Amigos
             </button>
-            <button
-              onClick={() => setShowFollowersModal(true)}
-              className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
-                active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-            >
-              Seguidores
-            </button>
           </div>
         </div>
       </div>
       {showFriendsModal && <FriendsModal onClose={() => setShowFriendsModal(false)} />}{" "}
-      {showFollowersModal && <FollowersModal onClose={() => setShowFollowersModal(false)} />}{" "}
     </div>
   );
 };
