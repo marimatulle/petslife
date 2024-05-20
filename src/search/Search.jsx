@@ -53,15 +53,15 @@ const Search = () => {
       >
         {users.map((user) => (
           <Link to={`/userprofile/${user.id}`} key={user.id}>
-            <div className="flex items-center space-x-4 p-2 mb-2 border-b-2 border-gray-200">
+            <div className="flex items-center space-x-4 p-2 mb-2 border-b-2 border-gray-200 bg-orange-300 hover:bg-orange-400">
               <img
                 className="w-12 h-12 rounded-full"
                 src={user.photoURL}
                 alt="User avatar"
               />
               <div>
-                <p className="text-black">{user.name}</p>
-                <p className="text-gray-500">{user.username}</p>
+                <p className="text-black font-bold">{user.name}</p>
+                <p className="text-gray-500 font-medium">{user.username}</p>
               </div>
             </div>
           </Link>

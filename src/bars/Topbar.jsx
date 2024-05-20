@@ -14,22 +14,22 @@ const Topbar = () => {
   };
 
   return (
-    <div className="bg-white p-6 flex justify-between items-center">
+    <div className="bg-white p-6 flex flex-col sm:flex-row justify-between items-center">
       <Navbar />
-      <div className="flex items-center">
+      <div className="flex flex-row sm:flex-row items-center justify-center sm:justify-end mt-4 sm:mt-0">
         <Link to="/cards">
-          <button className="mr-8 text-gray-500 text-2xl flex items-center">
+          <button className="mb-4 sm:mb-0 mr-4 sm:mr-8 text-gray-500 text-2xl flex items-center">
             <FaPaw />
           </button>
         </Link>
         <Link to="/profile">
-          <button className="mr-8 text-gray-500 text-2xl flex items-center">
+          <button className="mb-4 sm:mb-0 mr-4 sm:mr-8 text-gray-500 text-2xl flex items-center">
             <FaUserCircle />
           </button>
         </Link>
         <button
           onClick={handleLogout}
-          className="mr-4 text-gray-500 text-2xl flex items-center"
+          className="mb-4 sm:mb-0 sm:mr-4 text-gray-500 text-2xl flex items-center"
         >
           <FaSignOutAlt />
         </button>
