@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../bars/Topbar";
 import FriendsModal from "./FriendsModal";
+import FriendshipRequestsModal from "./FriendshipRequestsModal";
 import { auth, database, storage } from "../firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -14,6 +15,7 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFriendsModal, setShowFriendsModal] = useState(false);
+  const [showFriendshipRequestsModal, setShowFriendshipRequestsModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -123,10 +125,22 @@ const Profile = () => {
             >
               Amigos
             </button>
+            <button
+              onClick={() => setShowFriendshipRequestsModal(true)}
+              className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
+                active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+            >
+              Solicitações de Amizade
+            </button>
           </div>
         </div>
       </div>
-      {showFriendsModal && <FriendsModal onClose={() => setShowFriendsModal(false)} />}{" "}
+      {showFriendsModal && (
+        <FriendsModal onClose={() => setShowFriendsModal(false)} />
+      )}{" "}
+      {showFriendshipRequestsModal && (
+        <FriendshipRequestsModal onClose={() => setShowFriendshipRequestsModal(false)} />
+      )}{" "}
     </div>
   );
 };
