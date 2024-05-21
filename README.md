@@ -34,7 +34,7 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
 - Ambos os usuários possuem um search para pesquisar o pet pelo nome.
 4) Amigos:
 - Ambos os usuários possuem dois botões no perfil, o de amigos e o de solicitações de amizade;
-- No perfil de um usuário pesquisado, pode ser desfeita a amizade ou enviada uma solicitação de amizade (no caso de veterinário se conectando com tutor ou vice versa), no caso de tutor pesquisando outro tutor ou veterinário pesquisando outro veterinário, eles apenas poderão visualizar o perfil um do outro, pois o intuito da aplicação é conectar tutores com veterinários para assim o veterinário fazer upload dos comprovantes de vacinação na carteira do pet;
+- No perfil de um usuário pesquisado, pode ser desfeita a amizade ou enviada uma solicitação de amizade (no caso de veterinário se conectando com tutor ou vice versa), no caso de tutor pesquisando outro tutor, eles apenas poderão visualizar o perfil um do outro, pois o intuito da aplicação é conectar tutores com veterinários para assim o veterinário fazer upload dos comprovantes de vacinação na carteira do pet (veterinários podem se conectar com outros veterinários através da solicitação de amizade);
 ## Utilização:
 1) Acesse o site e faça o cadastro;
 2) Faça o login com suas credenciais;
