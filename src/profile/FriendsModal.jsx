@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { database, auth } from "../firebase";
 import { Link } from "react-router-dom";
 

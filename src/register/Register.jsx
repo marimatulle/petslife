@@ -42,12 +42,9 @@ const Register = () => {
         }
         navigate("/login");
       }
-      toast.success(
-        "Cadastrado com sucesso!",
-        {
-          position: "top-center",
-        }
-      );
+      toast.success("Cadastrado com sucesso!", {
+        position: "top-center",
+      });
     } catch (error) {
       console.error(error.message);
       toast.error(error.message, {

@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { IoClose, IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
-import { collection, query, where, getDocs, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { database, auth } from "../firebase";
 
 const FriendshipRequestsModal = ({ onClose }) => {

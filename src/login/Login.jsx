@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/profile")
+      navigate("/profile");
       toast.success("Logado com sucesso!", {
         position: "top-center",
       });

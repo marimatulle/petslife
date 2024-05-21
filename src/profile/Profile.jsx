@@ -15,7 +15,8 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showFriendsModal, setShowFriendsModal] = useState(false);
-  const [showFriendshipRequestsModal, setShowFriendshipRequestsModal] = useState(false);
+  const [showFriendshipRequestsModal, setShowFriendshipRequestsModal] =
+    useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -51,7 +52,7 @@ const Profile = () => {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => { },
+        (snapshot) => {},
         (error) => {
           console.error(error);
           setIsLoading(false);
@@ -139,7 +140,9 @@ const Profile = () => {
         <FriendsModal onClose={() => setShowFriendsModal(false)} />
       )}{" "}
       {showFriendshipRequestsModal && (
-        <FriendshipRequestsModal onClose={() => setShowFriendshipRequestsModal(false)} />
+        <FriendshipRequestsModal
+          onClose={() => setShowFriendshipRequestsModal(false)}
+        />
       )}{" "}
     </div>
   );
