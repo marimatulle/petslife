@@ -56,7 +56,7 @@ const Profile = () => {
           console.error(error);
           setIsLoading(false);
           toast.error("Erro ao carregar imagem", {
-            position: "top-bottom",
+            position: "bottom-center",
           });
         },
         () => {
@@ -130,7 +130,7 @@ const Profile = () => {
               className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
                 active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
             >
-              Solicitações de Amizade
+              Solicitações
             </button>
           </div>
         </div>
