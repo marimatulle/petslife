@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoClose, IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { database, auth } from "../firebase";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
 
 const FriendshipRequestsModal = ({ onClose }) => {
   const [requests, setRequests] = useState([]);
@@ -15,10 +15,29 @@ const FriendshipRequestsModal = ({ onClose }) => {
         where("status", "==", "pending")
       );
       const querySnapshot = await getDocs(q);
-      const requests = [];
-      querySnapshot.forEach((doc) => {
-        requests.push({ id: doc.id, ...doc.data() });
+      const requestsPromises = querySnapshot.docs.map(async (document) => {
+        const senderId = document.data().senderId;
+        const senderDocRef = doc(database, "RegularUsers", senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        if (senderDocSnap.exists()) {
+          return {
+            id: document.id,
+            sender: senderDocSnap.data(),
+            ...document.data(),
+          };
+        } else {
+          const senderDocRef = doc(database, "Veterinarians", senderId);
+          const senderDocSnap = await getDoc(senderDocRef);
+          if (senderDocSnap.exists()) {
+            return {
+              id: document.id,
+              sender: senderDocSnap.data(),
+              ...document.data(),
+            };
+          }
+        }
       });
+      const requests = await Promise.all(requestsPromises);
       setRequests(requests);
     };
 
@@ -55,10 +74,10 @@ const FriendshipRequestsModal = ({ onClose }) => {
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
         ></span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
-              <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                 <h3
                   className="text-lg leading-6 font-bold text-gray-900"
                   id="modal-title"
@@ -66,14 +85,37 @@ const FriendshipRequestsModal = ({ onClose }) => {
                   Solicitações de Amizade:
                 </h3>
                 {requests.map((request) => (
-                  <div key={request.id}>
-                    <p>{request.senderId}</p>
-                    <button onClick={() => handleAccept(request.id)}>
-                      <IoCheckmarkCircle />
-                    </button>
-                    <button onClick={() => handleReject(request.id)}>
-                      <IoCloseCircle />
-                    </button>
+                  <div
+                    key={request.id}
+                    className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-5 mb-2 border-b-2 border-gray-200"
+                  >
+                    <img
+                      className="w-12 h-12 rounded-full"
+                      src={request.sender.photoURL}
+                      alt="User avatar"
+                    />
+                    <div className="flex-1">
+                      <p className="text-black font-bold">
+                        {request.sender.name}
+                      </p>
+                      <p className="text-gray-500 font-medium">
+                        {request.sender.username}
+                      </p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleAccept(request.id)}
+                        className="text-green-500 text-4xl"
+                      >
+                        <IoCheckmarkCircle />
+                      </button>
+                      <button
+                        onClick={() => handleReject(request.id)}
+                        className="text-red-500 text-4xl"
+                      >
+                        <IoCloseCircle />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
