@@ -53,7 +53,7 @@ const Search = () => {
       >
         {users.map((user) => (
           <Link to={`/userprofile/${user.id}`} key={user.id}>
-            <div className="flex items-center space-x-4 p-2 mb-2 border-b-2 border-gray-200 bg-orange-300 hover:bg-orange-400">
+            <div className="flex items-center space-x-4 p-2 mb-2 border-b-2 border-gray-200 hover:bg-orange-300">
               <img
                 className="w-12 h-12 rounded-full"
                 src={user.photoURL}
