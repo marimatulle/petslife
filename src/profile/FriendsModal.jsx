@@ -16,38 +16,78 @@ const FriendsModal = ({ onClose }) => {
 
   useEffect(() => {
     const fetchFriends = async () => {
-      const q = query(
+      const receivedRequestsQuery = query(
         collection(database, "FriendRequests"),
         where("receiverId", "==", auth.currentUser.uid),
         where("status", "==", "accepted")
       );
-      const querySnapshot = await getDocs(q);
-      const friendsPromises = querySnapshot.docs.map(async (docSnapshot) => {
-        const senderId = docSnapshot.data().senderId;
-        const senderDocRef = doc(database, "RegularUsers", senderId);
-        const senderDocSnap = await getDoc(senderDocRef);
-        if (senderDocSnap.exists()) {
-          return {
-            id: docSnapshot.id,
-            friend: senderDocSnap.data(),
-            senderId: senderId,
-            ...docSnapshot.data(),
-          };
-        } else {
-          const senderDocRef = doc(database, "Veterinarians", senderId);
+      const sentRequestsQuery = query(
+        collection(database, "FriendRequests"),
+        where("senderId", "==", auth.currentUser.uid),
+        where("status", "==", "accepted")
+      );
+
+      const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
+      const sentRequestsSnapshot = await getDocs(sentRequestsQuery);
+
+      const receivedFriendsPromises = receivedRequestsSnapshot.docs.map(
+        async (docSnapshot) => {
+          const senderId = docSnapshot.data().senderId;
+          const senderDocRef = doc(database, "RegularUsers", senderId);
           const senderDocSnap = await getDoc(senderDocRef);
           if (senderDocSnap.exists()) {
             return {
               id: docSnapshot.id,
               friend: senderDocSnap.data(),
-              senderId: senderId, // Adicione esta linha
+              senderId: senderId,
               ...docSnapshot.data(),
             };
+          } else {
+            const senderDocRef = doc(database, "Veterinarians", senderId);
+            const senderDocSnap = await getDoc(senderDocRef);
+            if (senderDocSnap.exists()) {
+              return {
+                id: docSnapshot.id,
+                friend: senderDocSnap.data(),
+                senderId: senderId,
+                ...docSnapshot.data(),
+              };
+            }
           }
         }
-      });
-      const friends = await Promise.all(friendsPromises);
-      setFriends(friends);
+      );
+
+      const sentFriendsPromises = sentRequestsSnapshot.docs.map(
+        async (docSnapshot) => {
+          const receiverId = docSnapshot.data().receiverId;
+          const receiverDocRef = doc(database, "RegularUsers", receiverId);
+          const receiverDocSnap = await getDoc(receiverDocRef);
+          if (receiverDocSnap.exists()) {
+            return {
+              id: docSnapshot.id,
+              friend: receiverDocSnap.data(),
+              receiverId: receiverId,
+              ...docSnapshot.data(),
+            };
+          } else {
+            const receiverDocRef = doc(database, "Veterinarians", receiverId);
+            const receiverDocSnap = await getDoc(receiverDocRef);
+            if (receiverDocSnap.exists()) {
+              return {
+                id: docSnapshot.id,
+                friend: receiverDocSnap.data(),
+                receiverId: receiverId,
+                ...docSnapshot.data(),
+              };
+            }
+          }
+        }
+      );
+
+      const receivedFriends = await Promise.all(receivedFriendsPromises);
+      const sentFriends = await Promise.all(sentFriendsPromises);
+
+      setFriends([...receivedFriends, ...sentFriends]);
     };
 
     fetchFriends();
