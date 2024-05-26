@@ -3,7 +3,15 @@ import Topbar from "../bars/Topbar";
 import FriendsModal from "./FriendsModal";
 import FriendshipRequestsModal from "./FriendshipRequestsModal";
 import { auth, database, storage } from "../firebase";
-import { getDoc, doc, setDoc } from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { FaUserCircle } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -17,6 +25,7 @@ const Profile = () => {
   const [showFriendsModal, setShowFriendsModal] = useState(false);
   const [showFriendshipRequestsModal, setShowFriendshipRequestsModal] =
     useState(false);
+  const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,6 +45,43 @@ const Profile = () => {
     };
 
     fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const q = query(
+      collection(database, "FriendRequests"),
+      where("receiverId", "==", auth.currentUser.uid),
+      where("status", "==", "pending")
+    );
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const requestsPromises = querySnapshot.docs.map(async (document) => {
+        const senderId = document.data().senderId;
+        const senderDocRef = doc(database, "RegularUsers", senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        if (senderDocSnap.exists()) {
+          return {
+            id: document.id,
+            sender: senderDocSnap.data(),
+            ...document.data(),
+          };
+        } else {
+          const senderDocRef = doc(database, "Veterinarians", senderId);
+          const senderDocSnap = await getDoc(senderDocRef);
+          if (senderDocSnap.exists()) {
+            return {
+              id: document.id,
+              sender: senderDocSnap.data(),
+              ...document.data(),
+            };
+          }
+        }
+      });
+      const requests = await Promise.all(requestsPromises);
+      setRequests(requests);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleImageUpload = (e) => {
@@ -131,7 +177,12 @@ const Profile = () => {
               className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98]
                 active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
             >
-              Solicitações
+              Solicitações{" "}
+              {requests.length > 0
+                ? requests.length > 9
+                  ? "9+"
+                  : requests.length
+                : ""}
             </button>
           </div>
         </div>
@@ -142,6 +193,7 @@ const Profile = () => {
       {showFriendshipRequestsModal && (
         <FriendshipRequestsModal
           onClose={() => setShowFriendshipRequestsModal(false)}
+          requests={requests}
         />
       )}{" "}
     </div>

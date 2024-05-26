@@ -7,7 +7,7 @@ import {
   updateDoc,
   doc,
   getDoc,
-  onSnapshot
+  onSnapshot,
 } from "firebase/firestore";
 import { database, auth } from "../firebase";
 
@@ -89,7 +89,8 @@ const FriendshipRequestsModal = ({ onClose }) => {
                   className="text-lg leading-6 font-bold text-gray-900"
                   id="modal-title"
                 >
-                  Solicitações de Amizade:
+                  Solicitações de Amizade:{" "}
+                  {requests.length > 9 ? "9+" : requests.length}
                 </h3>
                 {requests.map((request) => (
                   <div
