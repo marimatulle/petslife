@@ -37,7 +37,9 @@ const SearchedUserProfile = () => {
     [STATUS.strangers]: "Enviar solicitação de amizade",
   };
 
-  const [buttonText, setButtonText] = useState("loading...");
+  const [buttonText, setButtonText] = useState("Loading...");
+
+  const allowsFriendship = Boolean(user?.crmv) !== Boolean(currentUser?.crmv);
 
   const fetchUserData = async (collectionName, id) => {
     const userDocRef = doc(database, collectionName, id);
@@ -46,7 +48,6 @@ const SearchedUserProfile = () => {
   };
 
   useEffect(() => {
-    console.log("load inicial");
     const queryStatus = query(
       collection(database, "FriendRequests"),
       where("receiverId", "==", auth.currentUser.uid)
@@ -54,7 +55,6 @@ const SearchedUserProfile = () => {
 
     getDocs(queryStatus).then((response) => {
       const updateStatus = response.docs[0]?.data().status || STATUS.strangers;
-      console.log({ status: response.docs[0]?.data().status });
       setFriendshipStatus(updateStatus);
     });
   }, []);
@@ -91,9 +91,6 @@ const SearchedUserProfile = () => {
   }, [userId]);
 
   useEffect(() => {
-    console.log({
-      friendshipStatus,
-    });
     setButtonText(MAP_STATUS_TO_TEXT[friendshipStatus]);
   }, [friendshipStatus]);
 
@@ -124,13 +121,6 @@ const SearchedUserProfile = () => {
         position: "top-center",
       });
     } else {
-      if (
-        (user?.crmv && currentUser?.crmv) ||
-        (!user?.crmv && !currentUser?.crmv)
-      ) {
-        return;
-      }
-
       const friendRequestDocSnap = await getDoc(friendRequestDocRef);
       if (!friendRequestDocSnap.exists()) {
         await setDoc(friendRequestDocRef, {
@@ -180,12 +170,14 @@ const SearchedUserProfile = () => {
             {user?.crmv ? ` (CRMV: ${user?.crmv})` : ""}
           </p>
           <div className="flex items-center justify-center mt-4 space-x-4">
-            <button
-              onClick={handleButtonClick}
-              className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-            >
-              {buttonText}
-            </button>
+            {allowsFriendship && (
+              <button
+                onClick={handleButtonClick}
+                className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+              >
+                {buttonText}
+              </button>
+            )}
           </div>
         </div>
       </div>
