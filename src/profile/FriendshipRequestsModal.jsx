@@ -4,10 +4,10 @@ import {
   collection,
   query,
   where,
-  getDocs,
   updateDoc,
   doc,
   getDoc,
+  onSnapshot
 } from "firebase/firestore";
 import { database, auth } from "../firebase";
 
@@ -15,13 +15,13 @@ const FriendshipRequestsModal = ({ onClose }) => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      const q = query(
-        collection(database, "FriendRequests"),
-        where("receiverId", "==", auth.currentUser.uid),
-        where("status", "==", "pending")
-      );
-      const querySnapshot = await getDocs(q);
+    const q = query(
+      collection(database, "FriendRequests"),
+      where("receiverId", "==", auth.currentUser.uid),
+      where("status", "==", "pending")
+    );
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const requestsPromises = querySnapshot.docs.map(async (document) => {
         const senderId = document.data().senderId;
         const senderDocRef = doc(database, "RegularUsers", senderId);
@@ -46,9 +46,9 @@ const FriendshipRequestsModal = ({ onClose }) => {
       });
       const requests = await Promise.all(requestsPromises);
       setRequests(requests);
-    };
+    });
 
-    fetchRequests();
+    return () => unsubscribe();
   }, []);
 
   const handleAccept = async (requestId) => {

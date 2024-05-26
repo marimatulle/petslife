@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 import { database, auth } from "../firebase";
 import Topbar from "../bars/Topbar";
 import { FaUserCircle } from "react-icons/fa";
@@ -14,54 +24,76 @@ const SearchedUserProfile = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [buttonText, setButtonText] = useState("Enviar solicitação de amizade");
+
+  const MAP_STATUS_TO_TEXT = {
+    accepted: "Desfazer amizade",
+    pending: "Cancelar solicitação de amizade",
+    rejected: "Enviar solicitação de amizade",
+  };
+
+  const [buttonText, setButtonText] = useState("loading...");
+
+  const fetchUserData = async (collectionName, id) => {
+    const userDocRef = doc(database, collectionName, id);
+    const userDocSnap = await getDoc(userDocRef);
+    return userDocSnap.exists() ? userDocSnap.data() : null;
+  };
+
+  useEffect(() => {
+    console.log("load inicial");
+    const queryStatus = query(
+      collection(database, "FriendRequests"),
+      where("receiverId", "==", auth.currentUser.uid)
+    );
+
+    getDocs(queryStatus).then((response) => {
+      const updateStatus = response.docs[0]?.data().status || "rejected";
+      console.log({ status: response.docs[0]?.data().status });
+      setFriendshipStatus(updateStatus);
+    });
+  }, []);
+
+  
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userDocRef = doc(database, "RegularUsers", userId);
-      const userDocSnap = await getDoc(userDocRef);
-      if (userDocSnap.exists()) {
-        setUser(userDocSnap.data());
-      } else {
-        const userDocRef = doc(database, "Veterinarians", userId);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          setUser(userDocSnap.data());
-        }
-      }
+      const userData =
+        (await fetchUserData("RegularUsers", userId)) ||
+        (await fetchUserData("Veterinarians", userId));
+      setUser(userData);
 
-      const currentUserDocRef = doc(
-        database,
-        "RegularUsers",
-        auth.currentUser.uid
-      );
-      const currentUserDocSnap = await getDoc(currentUserDocRef);
-      if (currentUserDocSnap.exists()) {
-        setCurrentUser(currentUserDocSnap.data());
-      } else {
-        const currentUserDocRef = doc(
-          database,
-          "Veterinarians",
-          auth.currentUser.uid
-        );
-        const currentUserDocSnap = await getDoc(currentUserDocRef);
-        if (currentUserDocSnap.exists()) {
-          setCurrentUser(currentUserDocSnap.data());
-        }
-      }
+      const currentUserData =
+        (await fetchUserData("RegularUsers", auth.currentUser.uid)) ||
+        (await fetchUserData("Veterinarians", auth.currentUser.uid));
+      setCurrentUser(currentUserData);
     };
 
     fetchUser();
   }, [userId]);
 
-  const sendFriendRequest = async () => {
-    if (
-      (user?.crmv && currentUser?.crmv) ||
-      (!user?.crmv && !currentUser?.crmv)
-    ) {
-      return;
-    }
+  useEffect(() => {
+    const friendRequestDocRef = doc(
+      database,
+      "FriendRequests",
+      `${auth.currentUser.uid}_${userId}`
+    );
 
+    onSnapshot(friendRequestDocRef, (doc) => {
+      if (doc.exists()) {
+        const friendRequest = doc.data();
+        setFriendshipStatus(friendRequest.status);
+      }
+    });
+  }, [userId]);
+
+  useEffect(() => {
+    console.log({
+      friendshipStatus,
+    });
+    setButtonText(MAP_STATUS_TO_TEXT[friendshipStatus]);
+  }, [friendshipStatus]);
+
+  const handleButtonClick = async () => {
     const senderId = auth.currentUser.uid;
     const friendRequestDocRef = doc(
       database,
@@ -69,32 +101,45 @@ const SearchedUserProfile = () => {
       `${senderId}_${userId}`
     );
 
-    const friendRequestDocSnap = await getDoc(friendRequestDocRef);
-    if (!friendRequestDocSnap.exists()) {
-      await setDoc(friendRequestDocRef, {
-        senderId,
-        receiverId: userId,
-        status: "pending",
-      });
-      setFriendshipStatus("pending");
-      toast.success("Sua solicitação de amizade foi enviada com sucesso!", {
+    if (friendshipStatus === "accepted") {
+      await deleteDoc(friendRequestDocRef);
+      setFriendshipStatus("rejected");
+      setButtonText("Enviar solicitação de amizade");
+      localStorage.setItem("buttonText", "Enviar solicitação de amizade");
+      toast.success("Amizade desfeita com sucesso!", {
         position: "top-center",
       });
+    } else if (friendshipStatus === "pending") {
+      await deleteDoc(friendRequestDocRef);
+      setFriendshipStatus("rejected");
+      setButtonText("Enviar solicitação de amizade");
+      localStorage.setItem("buttonText", "Enviar solicitação de amizade");
+      toast.success("Solicitação de amizade cancelada com sucesso!", {
+        position: "top-center",
+      });
+    } else {
+      if (
+        (user?.crmv && currentUser?.crmv) ||
+        (!user?.crmv && !currentUser?.crmv)
+      ) {
+        return;
+      }
+
+      const friendRequestDocSnap = await getDoc(friendRequestDocRef);
+      if (!friendRequestDocSnap.exists()) {
+        await setDoc(friendRequestDocRef, {
+          senderId,
+          receiverId: userId,
+          status: "pending",
+        });
+        setFriendshipStatus("pending");
+        setButtonText("Cancelar solicitação de amizade");
+        localStorage.setItem("buttonText", "Cancelar solicitação de amizade");
+        toast.success("Solicitação de amizade enviada com sucesso!", {
+          position: "top-center",
+        });
+      }
     }
-  };
-
-  const unfriend = async () => {
-    const senderId = auth.currentUser.uid;
-    const friendRequestDocRef = doc(
-      database,
-      "FriendRequests",
-      `${senderId}_${userId}`
-    );
-
-    await updateDoc(friendRequestDocRef, {
-      status: "rejected",
-    });
-    setFriendshipStatus(null);
   };
 
   return (
@@ -129,23 +174,12 @@ const SearchedUserProfile = () => {
             {user?.crmv ? ` (CRMV: ${user?.crmv})` : ""}
           </p>
           <div className="flex items-center justify-center mt-4 space-x-4">
-            {friendshipStatus === "pending" ? (
-              <button
-                onClick={unfriend}
-                className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-              >
-                Cancelar solicitação de amizade
-              </button>
-            ) : (
-              <button
-                onClick={sendFriendRequest}
-                className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-              >
-                {friendshipStatus === "pending"
-                  ? "Solicitação enviada"
-                  : "Enviar solicitação de amizade"}
-              </button>
-            )}
+            <button
+              onClick={handleButtonClick}
+              className="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+            >
+              {buttonText}
+            </button>
           </div>
         </div>
       </div>
