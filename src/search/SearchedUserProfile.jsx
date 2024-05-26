@@ -25,10 +25,16 @@ const SearchedUserProfile = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const STATUS = {
+    friends: "accepted",
+    pendingRequest: "pending",
+    strangers: "rejected",
+  };
+
   const MAP_STATUS_TO_TEXT = {
-    accepted: "Desfazer amizade",
-    pending: "Cancelar solicitação de amizade",
-    rejected: "Enviar solicitação de amizade",
+    [STATUS.friends]: "Desfazer amizade",
+    [STATUS.pendingRequest]: "Cancelar solicitação de amizade",
+    [STATUS.strangers]: "Enviar solicitação de amizade",
   };
 
   const [buttonText, setButtonText] = useState("loading...");
@@ -47,13 +53,11 @@ const SearchedUserProfile = () => {
     );
 
     getDocs(queryStatus).then((response) => {
-      const updateStatus = response.docs[0]?.data().status || "rejected";
+      const updateStatus = response.docs[0]?.data().status || STATUS.strangers;
       console.log({ status: response.docs[0]?.data().status });
       setFriendshipStatus(updateStatus);
     });
   }, []);
-
-  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -95,23 +99,25 @@ const SearchedUserProfile = () => {
 
   const handleButtonClick = async () => {
     const senderId = auth.currentUser.uid;
-    const friendRequestDocRef = doc(
-      database,
-      "FriendRequests",
-      `${senderId}_${userId}`
-    );
 
-    if (friendshipStatus === "accepted") {
+    const id =
+      friendshipStatus === STATUS.friends
+        ? `${userId}_${senderId}`
+        : `${senderId}_${userId}`;
+
+    const friendRequestDocRef = doc(database, "FriendRequests", id);
+
+    if (friendshipStatus === STATUS.friends) {
       await deleteDoc(friendRequestDocRef);
-      setFriendshipStatus("rejected");
+      setFriendshipStatus(STATUS.strangers);
       setButtonText("Enviar solicitação de amizade");
       localStorage.setItem("buttonText", "Enviar solicitação de amizade");
       toast.success("Amizade desfeita com sucesso!", {
         position: "top-center",
       });
-    } else if (friendshipStatus === "pending") {
+    } else if (friendshipStatus === STATUS.pendingRequest) {
       await deleteDoc(friendRequestDocRef);
-      setFriendshipStatus("rejected");
+      setFriendshipStatus(STATUS.strangers);
       setButtonText("Enviar solicitação de amizade");
       localStorage.setItem("buttonText", "Enviar solicitação de amizade");
       toast.success("Solicitação de amizade cancelada com sucesso!", {
@@ -130,9 +136,9 @@ const SearchedUserProfile = () => {
         await setDoc(friendRequestDocRef, {
           senderId,
           receiverId: userId,
-          status: "pending",
+          status: STATUS.pendingRequest,
         });
-        setFriendshipStatus("pending");
+        setFriendshipStatus(STATUS.pendingRequest);
         setButtonText("Cancelar solicitação de amizade");
         localStorage.setItem("buttonText", "Cancelar solicitação de amizade");
         toast.success("Solicitação de amizade enviada com sucesso!", {
