@@ -72,7 +72,7 @@ const FriendshipRequestsModal = ({ onClose }) => {
       role="dialog"
       aria-modal="true"
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
           aria-hidden="true"
@@ -89,8 +89,7 @@ const FriendshipRequestsModal = ({ onClose }) => {
                   className="text-lg leading-6 font-bold text-gray-900"
                   id="modal-title"
                 >
-                  Solicitações de Amizade:{" "}
-                  {requests.length > 9 ? "9+" : requests.length}
+                  Solicitações:
                 </h3>
                 {requests.map((request) => (
                   <div
