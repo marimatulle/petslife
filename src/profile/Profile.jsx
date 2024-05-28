@@ -123,9 +123,9 @@ const Profile = () => {
   }, [selectedImage, user?.crmv]);
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen flex flex-col">
       <Topbar location="/profile" />
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center flex-grow">
         <div className="w-full lg:w-3/4 xl:w-1/2 bg-white shadow rounded-lg p-8 m-4">
           <div className="flex justify-center">
             <label
@@ -189,13 +189,13 @@ const Profile = () => {
       </div>
       {showFriendsModal && (
         <FriendsModal onClose={() => setShowFriendsModal(false)} />
-      )}{" "}
+      )}
       {showFriendshipRequestsModal && (
         <FriendshipRequestsModal
           onClose={() => setShowFriendshipRequestsModal(false)}
           requests={requests}
         />
-      )}{" "}
+      )}
     </div>
   );
 };
