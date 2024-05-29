@@ -151,7 +151,7 @@ const Profile = () => {
                 <FaUserCircle className="text-gray-400 w-48 h-48 mx-auto" />
               )}
               {isHovered && (
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-25 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer">
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 text-white rounded-full cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-110">
                   Alterar imagem
                 </div>
               )}
