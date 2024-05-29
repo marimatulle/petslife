@@ -10,6 +10,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { database, auth } from "../firebase";
+import { FaUserCircle } from "react-icons/fa";
 
 const FriendshipRequestsModal = ({ onClose }) => {
   const [requests, setRequests] = useState([]);
@@ -96,11 +97,17 @@ const FriendshipRequestsModal = ({ onClose }) => {
                     key={request.id}
                     className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-5 mb-2 border-b-2 border-gray-200"
                   >
-                    <img
-                      className="w-12 h-12 rounded-full"
-                      src={request.sender.photoURL}
-                      alt="User avatar"
-                    />
+                    {request.sender.photoURL ? (
+                      <img
+                        className="w-12 h-12 rounded-full"
+                        src={request.sender.photoURL}
+                        alt="User avatar"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-12 h-12">
+                        <FaUserCircle className="text-gray-400 w-12 h-12" />
+                      </div>
+                    )}
                     <div className="flex-1">
                       <p className="text-black font-bold">
                         {request.sender.name}
