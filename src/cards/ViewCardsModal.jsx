@@ -1,7 +1,7 @@
 import React from "react";
 
-const CardsModal = () => {
-  return <div>CardsModal</div>;
+const ViewCardsModal = () => {
+  return <div>ViewCardsModal</div>;
 };
 
-export default CardsModal;
+export default ViewCardsModal;
