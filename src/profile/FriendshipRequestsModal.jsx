@@ -82,7 +82,7 @@ const FriendshipRequestsModal = ({ onClose }) => {
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
         ></span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
+        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-auto mx-auto sm:my-8 sm:align-middle w-full sm:max-w-lg">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -138,7 +138,7 @@ const FriendshipRequestsModal = ({ onClose }) => {
                 className="absolute top-0 right-0 m-2 bg-red-500 hover:bg-red-600 text-white rounded w-8 h-8 flex items-center justify-center"
               >
                 <IoClose size={24} />
-              </button>{" "}
+              </button>
             </div>
           </div>
         </div>
