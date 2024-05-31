@@ -22,10 +22,12 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
 - Para os tutores:
   - Existe um botão "+" para criar uma nova carteira;
   - Os dados do pet incluem:
-    - Nome do pet;
+    - Nome;
     - Espécie;
     - Raça;
-    - Breve descrição;
+    - Idade;
+    - Cor;
+    - Doenças pré-existentes;
     - Foto do pet.
   - Os tutores não podem fazer upload dos comprovantes de vacinação.
 - Para usuários veterinários:
