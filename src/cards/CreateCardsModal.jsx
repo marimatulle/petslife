@@ -15,7 +15,7 @@ const CreateCardsModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(database, "Cards"), {
+      await addDoc(collection(database, "Cards"), {
         animalName: animalName,
         animalSpecies: animalSpecies,
         animalBreed: animalBreed,
@@ -86,8 +86,8 @@ const CreateCardsModal = ({ onClose }) => {
                       required
                     >
                       <option value="">Selecione a espécie</option>
-                      <option value="dog">Cachorro</option>
-                      <option value="cat">Gato</option>
+                      <option value="Cachorro">Cachorro</option>
+                      <option value="Gato">Gato</option>
                     </select>
                   </div>
                   <div className="mb-4">
