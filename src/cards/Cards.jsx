@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../bars/Topbar";
 import { auth, database, storage } from "../firebase";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import PetsBarAndButton from "../bars/PetsBarAndButton";
 import { FaDog, FaCat } from "react-icons/fa";
@@ -11,8 +11,7 @@ import { toast } from "react-toastify";
 const Cards = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingCards, setLoadingCards] = useState({});
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -32,9 +31,9 @@ const Cards = () => {
     });
   }, []);
 
-  const handleImageUpload = (e, card) => {
-    setSelectedImage(e.target.files[0]);
-    setIsLoading(true);
+  const handleImageUpload = async (e, card) => {
+    const selectedImage = e.target.files[0];
+    setLoadingCards((prev) => ({ ...prev, [card.id]: true }));
     const uploadTask = uploadBytesResumable(
       ref(storage, `cards/${card.id}`),
       selectedImage
@@ -45,7 +44,7 @@ const Cards = () => {
       (snapshot) => {},
       (error) => {
         console.error(error);
-        setIsLoading(false);
+        setLoadingCards((prev) => ({ ...prev, [card.id]: false }));
         toast.error("Erro ao carregar imagem", {
           position: "bottom-center",
         });
@@ -53,7 +52,9 @@ const Cards = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           card.photoURL = downloadURL;
-          setIsLoading(false);
+          setLoadingCards((prev) => ({ ...prev, [card.id]: false }));
+          const cardDocRef = doc(database, "Cards", card.id);
+          setDoc(cardDocRef, { photoURL: downloadURL }, { merge: true });
         });
       }
     );
@@ -80,8 +81,8 @@ const Cards = () => {
                     className="hidden"
                     onChange={(e) => handleImageUpload(e, card)}
                   />
-                  {isLoading ? (
-                    <ClipLoader color="#fb923c" loading={isLoading} size={50} />
+                  {loadingCards[card.id] ? (
+                    <ClipLoader color="#fb923c" loading={true} size={50} />
                   ) : card.photoURL ? (
                     <img
                       className="w-24 h-24 rounded-full mx-auto"
