@@ -8,8 +8,10 @@ const CreateCardsModal = ({ onClose }) => {
   const [animalName, setAnimalName] = useState("");
   const [animalSpecies, setAnimalSpecies] = useState("");
   const [animalBreed, setAnimalBreed] = useState("");
+  const [animalSex, setAnimalSex] = useState("");
   const [animalAge, setAnimalAge] = useState("");
   const [animalColor, setAnimalColor] = useState("");
+  const [isNeutered, setIsNeutered] = useState("");
   const [preExistingIllnesses, setPreExistingIllnesses] = useState("");
 
   const handleSubmit = async (e) => {
@@ -19,8 +21,10 @@ const CreateCardsModal = ({ onClose }) => {
         animalName: animalName,
         animalSpecies: animalSpecies,
         animalBreed: animalBreed,
+        animalSex: animalSex,
         animalAge: animalAge,
         animalColor: animalColor,
+        isNeutered: isNeutered,
         preExistingIllnesses: preExistingIllnesses,
       });
       toast.success("Carteira cadastrada com sucesso!", {
@@ -105,6 +109,21 @@ const CreateCardsModal = ({ onClose }) => {
                   </div>
                   <div className="mb-4">
                     <label className="text-black font-medium">
+                      Sexo do animal:
+                    </label>
+                    <select
+                      className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+                      value={animalSex}
+                      onChange={(e) => setAnimalSex(e.target.value)}
+                      required
+                    >
+                      <option value="">Selecione o sexo do animal</option>
+                      <option value="Macho">Macho</option>
+                      <option value="Fêmea">Fêmea</option>
+                    </select>
+                  </div>
+                  <div className="mb-4">
+                    <label className="text-black font-medium">
                       Idade do animal:
                     </label>
                     <input
@@ -128,6 +147,21 @@ const CreateCardsModal = ({ onClose }) => {
                       onChange={(e) => setAnimalColor(e.target.value)}
                       required
                     />
+                  </div>
+                  <div className="mb-4">
+                    <label className="text-black font-medium">
+                      O animal é castrado?
+                    </label>
+                    <select
+                      className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+                      value={isNeutered}
+                      onChange={(e) => setIsNeutered(e.target.value)}
+                      required
+                    >
+                      <option value="">Selecione "Sim" ou "Não"</option>
+                      <option value="Sim">Sim</option>
+                      <option value="Não">Não</option>
+                    </select>
                   </div>
                   <div className="mb-4">
                     <label className="text-black font-medium">

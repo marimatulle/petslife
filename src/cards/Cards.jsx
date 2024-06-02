@@ -106,10 +106,16 @@ const Cards = () => {
                 <strong>Raça:</strong> {card.animalBreed}
               </p>
               <p>
+                <strong>Sexo:</strong> {card.animalSex}
+              </p>
+              <p>
                 <strong>Idade:</strong> {card.animalAge}
               </p>
               <p>
                 <strong>Cor:</strong> {card.animalColor}
+              </p>
+              <p>
+                <strong>Castrado:</strong> {card.isNeutered}
               </p>
               <p>
                 <strong>Doenças pré-existentes:</strong>{" "}
