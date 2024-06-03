@@ -120,32 +120,37 @@ const FriendsModal = ({ onClose }) => {
                 >
                   Amigos:
                 </h3>
-                {friends.map((friend) => (
-                  <Link to={`/userprofile/${friend.senderId}`} key={friend.id}>
-                    {" "}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-5 mb-2 border-b-2 border-gray-200">
-                      {friend.friend.photoURL ? (
-                        <img
-                          className="w-12 h-12 rounded-full"
-                          src={friend.friend.photoURL}
-                          alt="Friend avatar"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-12 h-12">
-                          <FaUserCircle className="text-gray-400 w-12 h-12" />
+                {friends.map((friend) => {
+                  const profileId =
+                    friend.senderId === auth.currentUser.uid
+                      ? friend.receiverId
+                      : friend.senderId;
+                  return (
+                    <Link to={`/userprofile/${profileId}`} key={friend.id}>
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-5 mb-2 border-b-2 border-gray-200">
+                        {friend.friend.photoURL ? (
+                          <img
+                            className="w-12 h-12 rounded-full"
+                            src={friend.friend.photoURL}
+                            alt="Friend avatar"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center w-12 h-12">
+                            <FaUserCircle className="text-gray-400 w-12 h-12" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <p className="text-black font-bold">
+                            {friend.friend.name}
+                          </p>
+                          <p className="text-gray-500 font-medium">
+                            {friend.friend.username}
+                          </p>
                         </div>
-                      )}
-                      <div className="flex-1">
-                        <p className="text-black font-bold">
-                          {friend.friend.name}
-                        </p>
-                        <p className="text-gray-500 font-medium">
-                          {friend.friend.username}
-                        </p>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
               <button
                 onClick={onClose}
