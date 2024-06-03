@@ -1,13 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import CreateCardsModal from "../cards/CreateCardsModal";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, database } from "../firebase";
 
 const PetsBarAndButton = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [userType, setUserType] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      let userRef = doc(database, "RegularUsers", auth.currentUser.uid);
+      let userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        setUserType("RegularUsers");
+      } else {
+        setUserType("Veterinarians");
+      }
+    };
+
+    fetchUserType();
+  }, []);
 
   const handleSearch = (event) => {
     if (event.key === "Enter") {
@@ -35,12 +53,14 @@ const PetsBarAndButton = () => {
         onKeyPress={handleSearch}
       />
       <div className="md:ml-auto">
-        <button
-          onClick={handleOpenModal}
-          className="mr-4 bg-orange-300 hover:bg-orange-400 text-white rounded-xl w-12 h-12 flex items-center justify-center text-2xl font-bold md:w-12 md:h-12 md:text-2xl"
-        >
-          <AiOutlinePlus />
-        </button>
+        {userType === "RegularUsers" && (
+          <button
+            onClick={handleOpenModal}
+            className="mr-4 bg-orange-300 hover:bg-orange-400 text-white rounded-xl w-12 h-12 flex items-center justify-center text-2xl font-bold md:w-12 md:h-12 md:text-2xl"
+          >
+            <AiOutlinePlus />
+          </button>
+        )}
       </div>
       {showModal && <CreateCardsModal onClose={handleCloseModal} />}
     </div>
