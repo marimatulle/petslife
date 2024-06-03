@@ -25,8 +25,10 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
     - Nome;
     - Espécie;
     - Raça;
+    - Sexo;
     - Idade;
     - Cor;
+    - Se é castrado;
     - Doenças pré-existentes;
     - Foto do pet.
   - Os tutores não podem fazer upload dos comprovantes de vacinação.
