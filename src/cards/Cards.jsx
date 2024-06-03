@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../bars/Topbar";
 import { auth, database, storage } from "../firebase";
-import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import PetsBarAndButton from "../bars/PetsBarAndButton";
-import { FaDog, FaCat } from "react-icons/fa";
+import { FaDog, FaCat, FaRegTrashAlt } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 
@@ -63,6 +70,15 @@ const Cards = () => {
     );
   };
 
+  const handleDeleteCard = async (card) => {
+    const cardDocRef = doc(database, "Cards", card.id);
+    await deleteDoc(cardDocRef);
+    setCards(cards.filter((c) => c.id !== card.id));
+    toast.success("Carteira excluída com sucesso!", {
+      position: "top-center",
+    });
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Topbar location="/cards" />
@@ -74,9 +90,15 @@ const Cards = () => {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="border border-gray-300 p-4 rounded-lg bg-white shadow"
+              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative"
             >
-              <div className="flex justify-center">
+              <button
+                onClick={() => handleDeleteCard(card)}
+                className="absolute top-2 left-2 text-red-500 text-lg"
+              >
+                <FaRegTrashAlt size={16} />
+              </button>
+              <div className="flex justify-center mt-8">
                 <label
                   onMouseEnter={() => setIsHovered({ [card.id]: true })}
                   onMouseLeave={() => setIsHovered({ [card.id]: false })}
