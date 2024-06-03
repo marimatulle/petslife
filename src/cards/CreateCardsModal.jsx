@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { collection, addDoc } from "firebase/firestore";
-import { database } from "../firebase";
+import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { database, auth } from "../firebase";
 import { toast } from "react-toastify";
 
 const CreateCardsModal = ({ onClose }) => {
@@ -17,6 +17,12 @@ const CreateCardsModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let docRef = doc(database, "RegularUsers", auth.currentUser.uid);
+      let docSnap = await getDoc(docRef);
+      let user;
+      if (docSnap.exists()) {
+        user = docSnap.data();
+      }
       await addDoc(collection(database, "Cards"), {
         animalName: animalName,
         animalSpecies: animalSpecies,
@@ -26,6 +32,9 @@ const CreateCardsModal = ({ onClose }) => {
         animalColor: animalColor,
         isNeutered: isNeutered,
         preExistingIllnesses: preExistingIllnesses,
+        userUUID: auth.currentUser.uid,
+        userFullName: user.name,
+        username: user.username,
       });
       toast.success("Carteira cadastrada com sucesso!", {
         position: "top-center",

@@ -23,10 +23,12 @@ const Cards = () => {
 
       const cardCollection = collection(database, "Cards");
       const cardSnapshot = await getDocs(cardCollection);
-      const cardList = cardSnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const cardList = cardSnapshot.docs
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+        .filter((card) => card.userUUID === user.uid);
       setCards(cardList);
     });
   }, []);
