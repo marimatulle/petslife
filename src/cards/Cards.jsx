@@ -11,7 +11,8 @@ import {
 } from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import PetsBarAndButton from "../bars/PetsBarAndButton";
-import { FaDog, FaCat, FaRegTrashAlt } from "react-icons/fa";
+import UpdateCardsModal from "./UpdateCardsModal";
+import { FaDog, FaCat, FaRegTrashAlt, FaPencilAlt } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 
@@ -20,6 +21,8 @@ const Cards = () => {
   const [cards, setCards] = useState([]);
   const [loadingCards, setLoadingCards] = useState({});
   const [isHovered, setIsHovered] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -79,6 +82,11 @@ const Cards = () => {
     });
   };
 
+  const handleEditCard = (card) => {
+    setSelectedCard(card);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Topbar location="/cards" />
@@ -97,6 +105,12 @@ const Cards = () => {
                 className="absolute top-2 left-2 text-red-500 text-lg"
               >
                 <FaRegTrashAlt size={16} />
+              </button>
+              <button
+                onClick={() => handleEditCard(card)}
+                className="absolute top-2 right-2 text-orange-400 text-lg"
+              >
+                <FaPencilAlt size={16} />
               </button>
               <div className="flex justify-center mt-8">
                 <label
@@ -159,6 +173,12 @@ const Cards = () => {
           ))}
         </div>
       </div>
+      {isModalOpen && (
+        <UpdateCardsModal
+          onClose={() => setIsModalOpen(false)}
+          cardId={selectedCard.id}
+        />
+      )}
     </div>
   );
 };
