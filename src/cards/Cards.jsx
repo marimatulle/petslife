@@ -12,6 +12,7 @@ const Cards = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
   const [loadingCards, setLoadingCards] = useState({});
+  const [isHovered, setIsHovered] = useState({});
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -76,7 +77,11 @@ const Cards = () => {
               className="border border-gray-300 p-4 rounded-lg bg-white shadow"
             >
               <div className="flex justify-center">
-                <label className="relative cursor-pointer">
+                <label
+                  onMouseEnter={() => setIsHovered({ [card.id]: true })}
+                  onMouseLeave={() => setIsHovered({ [card.id]: false })}
+                  className="relative cursor-pointer"
+                >
                   <input
                     type="file"
                     accept="image/*"
@@ -95,6 +100,11 @@ const Cards = () => {
                     <FaDog className="text-gray-400 w-24 h-24 mx-auto" />
                   ) : (
                     <FaCat className="text-gray-400 w-24 h-24 mx-auto" />
+                  )}
+                  {isHovered[card.id] && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 text-white rounded-full cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-110">
+                      <span className="text-center">Alterar imagem</span>
+                    </div>
                   )}
                 </label>
               </div>
