@@ -162,9 +162,9 @@ const SearchedUserProfile = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen flex flex-col">
       <Topbar location="/userprofile/:otherPersonId" />
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center flex-grow">
         <div className="w-full lg:w-3/4 xl:w-1/2 bg-white shadow rounded-lg p-8 m-4">
           <div className="flex justify-center">
             <label
