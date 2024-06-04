@@ -22,9 +22,11 @@ const FriendshipRequestsModal = ({ onClose }) => {
       where("status", "==", "pending")
     );
 
+
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const requestsPromises = querySnapshot.docs.map(async (document) => {
         const senderId = document.data().senderId;
+        debugger;
         const senderDocRef = doc(database, "RegularUsers", senderId);
         const senderDocSnap = await getDoc(senderDocRef);
         if (senderDocSnap.exists()) {

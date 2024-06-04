@@ -18,7 +18,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 
 const SearchedUserProfile = () => {
-  const { userId } = useParams();
+  const currentUserId = auth.currentUser.uid;
+  const { userId: otherPersonId } = useParams();
   const [user, setUser] = useState(null);
   const [friendshipStatus, setFriendshipStatus] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -48,9 +49,12 @@ const SearchedUserProfile = () => {
   };
 
   useEffect(() => {
+    if (friendshipStatus) return;
+
     const queryStatus = query(
       collection(database, "FriendRequests"),
-      where("receiverId", "==", auth.currentUser.uid)
+      where("receiverId", "in", [otherPersonId, currentUserId]),
+      where("senderId", "in", [otherPersonId, currentUserId])
     );
 
     getDocs(queryStatus).then((response) => {
@@ -62,8 +66,8 @@ const SearchedUserProfile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const userData =
-        (await fetchUserData("RegularUsers", userId)) ||
-        (await fetchUserData("Veterinarians", userId));
+        (await fetchUserData("RegularUsers", otherPersonId)) ||
+        (await fetchUserData("Veterinarians", otherPersonId));
       setUser(userData);
 
       const currentUserData =
@@ -73,13 +77,13 @@ const SearchedUserProfile = () => {
     };
 
     fetchUser();
-  }, [userId]);
+  }, [otherPersonId]);
 
   useEffect(() => {
     const friendRequestDocRef = doc(
       database,
       "FriendRequests",
-      `${auth.currentUser.uid}_${userId}`
+      `${auth.currentUser.uid}_${otherPersonId}`
     );
 
     onSnapshot(friendRequestDocRef, (doc) => {
@@ -88,21 +92,38 @@ const SearchedUserProfile = () => {
         setFriendshipStatus(friendRequest.status);
       }
     });
-  }, [userId]);
+  }, [otherPersonId]);
 
   useEffect(() => {
     setButtonText(MAP_STATUS_TO_TEXT[friendshipStatus]);
   }, [friendshipStatus]);
 
+  const findRefDoc = async () => {
+    const possibleIds = [
+      `${otherPersonId}_${currentUserId}`,
+      `${currentUserId}_${otherPersonId}`,
+    ];
+
+    return Promise.all(
+      possibleIds.map(async (id) => {
+        const item = doc(database, "FriendRequests", id);
+        if (!item) {
+          return item;
+        }
+        const friendRequestDocSnap = await getDoc(item);
+        return {
+          docRef: item,
+          exist: friendRequestDocSnap.exists(),
+        };
+      })
+    ).then((results) => {
+      return results.find((document) => document.exist) || results[0]
+    });
+  };
+
   const handleButtonClick = async () => {
-    const senderId = auth.currentUser.uid;
-
-    const id =
-      friendshipStatus === STATUS.friends
-        ? `${userId}_${senderId}`
-        : `${senderId}_${userId}`;
-
-    const friendRequestDocRef = doc(database, "FriendRequests", id);
+    const result = await findRefDoc();
+    const friendRequestDocRef = result?.docRef;
 
     if (friendshipStatus === STATUS.friends) {
       await deleteDoc(friendRequestDocRef);
@@ -122,10 +143,12 @@ const SearchedUserProfile = () => {
       });
     } else {
       const friendRequestDocSnap = await getDoc(friendRequestDocRef);
+
+      debugger
       if (!friendRequestDocSnap.exists()) {
         await setDoc(friendRequestDocRef, {
-          senderId,
-          receiverId: userId,
+          senderId: currentUserId,
+          receiverId: otherPersonId,
           status: STATUS.pendingRequest,
         });
         setFriendshipStatus(STATUS.pendingRequest);
@@ -140,7 +163,7 @@ const SearchedUserProfile = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Topbar location="/userprofile/:userId" />
+      <Topbar location="/userprofile/:otherPersonId" />
       <div className="flex justify-center items-center h-full">
         <div className="w-full lg:w-3/4 xl:w-1/2 bg-white shadow rounded-lg p-8 m-4">
           <div className="flex justify-center">
