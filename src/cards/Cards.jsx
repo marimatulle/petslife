@@ -3,18 +3,20 @@ import Topbar from "../bars/Topbar";
 import { auth, database, storage } from "../firebase";
 import {
   doc,
-  getDoc,
   collection,
   getDocs,
   setDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import PetsBarAndButton from "../bars/PetsBarAndButton";
 import UpdateCardsModal from "./UpdateCardsModal";
-import { FaDog, FaCat, FaRegTrashAlt, FaPencilAlt } from "react-icons/fa";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
+import Header from "./Header";
+import Image from './Image'
+import Description from "./Description";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
@@ -24,13 +26,32 @@ const Cards = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
+
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
-      let docRef = doc(database, "RegularUsers", user.uid);
-      let docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUser(docSnap.data());
-      }
+      console.log({ user })
+      setUser(user);
+  
+
+      const receivedRequestsQuery = query(
+        collection(database, "FriendRequests"),
+        where("receiverId", "==", auth.currentUser.uid),
+        where("status", "==", "accepted")
+      );
+      const sentRequestsQuery = query(
+        collection(database, "FriendRequests"),
+        where("senderId", "==", auth.currentUser.uid),
+        where("status", "==", "accepted")
+      );
+
+      const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
+      const sentRequestsSnapshot = await getDocs(sentRequestsQuery);
+
+      const friendIds = [
+        ...receivedRequestsSnapshot.docs.map((doc) => doc.data().senderId),
+        ...sentRequestsSnapshot.docs.map((doc) => doc.data().receiverId),
+        auth.currentUser.uid,
+      ];
 
       const cardCollection = collection(database, "Cards");
       const cardSnapshot = await getDocs(cardCollection);
@@ -39,7 +60,7 @@ const Cards = () => {
           ...doc.data(),
           id: doc.id,
         }))
-        .filter((card) => card.userUUID === user.uid);
+        .filter((card) => friendIds.includes(card.userUUID));
       setCards(cardList);
     });
   }, []);
@@ -87,6 +108,8 @@ const Cards = () => {
     setIsModalOpen(true);
   };
 
+  const checkOwnsership = (ownerId) => ownerId === user.uid;
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Topbar location="/cards" />
@@ -100,75 +123,20 @@ const Cards = () => {
               key={card.id}
               className="border border-gray-300 p-4 rounded-lg bg-white shadow relative"
             >
-              <button
-                onClick={() => handleDeleteCard(card)}
-                className="absolute top-2 left-2 text-red-500 text-lg"
-              >
-                <FaRegTrashAlt size={16} />
-              </button>
-              <button
-                onClick={() => handleEditCard(card)}
-                className="absolute top-2 right-2 text-orange-400 text-lg"
-              >
-                <FaPencilAlt size={16} />
-              </button>
-              <div className="flex justify-center mt-8">
-                <label
-                  onMouseEnter={() => setIsHovered({ [card.id]: true })}
-                  onMouseLeave={() => setIsHovered({ [card.id]: false })}
-                  className="relative cursor-pointer"
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handleImageUpload(e, card)}
-                  />
-                  {loadingCards[card.id] ? (
-                    <ClipLoader color="#fb923c" loading={true} size={50} />
-                  ) : card.photoURL ? (
-                    <img
-                      className="w-24 h-24 rounded-full mx-auto"
-                      src={card.photoURL}
-                      alt="Avatar do pet"
-                    />
-                  ) : card.animalSpecies === "Cachorro" ? (
-                    <FaDog className="text-gray-400 w-24 h-24 mx-auto" />
-                  ) : (
-                    <FaCat className="text-gray-400 w-24 h-24 mx-auto" />
-                  )}
-                  {isHovered[card.id] && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 text-white rounded-full cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-110">
-                      <span className="text-center">Alterar imagem</span>
-                    </div>
-                  )}
-                </label>
-              </div>
-              <h2 className="font-bold text-xl mb-2 mt-4 text-center">
-                {card.animalName}
-              </h2>
-              <p>
-                <strong>Espécie:</strong> {card.animalSpecies}
-              </p>
-              <p>
-                <strong>Raça:</strong> {card.animalBreed}
-              </p>
-              <p>
-                <strong>Sexo:</strong> {card.animalSex}
-              </p>
-              <p>
-                <strong>Idade:</strong> {card.animalAge}
-              </p>
-              <p>
-                <strong>Cor:</strong> {card.animalColor}
-              </p>
-              <p>
-                <strong>Castrado:</strong> {card.isNeutered}
-              </p>
-              <p>
-                <strong>Doenças pré-existentes:</strong>{" "}
-                {card.preExistingIllnesses}
-              </p>
+              <Header
+                isOwner={checkOwnsership(card.userUUID)}
+                card={card}
+                handleDeleteCard={handleDeleteCard}
+                handleEditCard={handleEditCard}
+              />
+              <Image card={card} 
+                isOwner={checkOwnsership(card.userUUID)}
+                handleImageUpload={handleImageUpload}
+                setIsHovered={setIsHovered}
+                loadingCards={loadingCards}
+                isHovered={isHovered}
+              />
+              <Description card={card} />
             </div>
           ))}
         </div>
