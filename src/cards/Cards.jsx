@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import Header from "./Header";
 import Image from "./Image";
 import Description from "./Description";
+import CardsModal from "./CardsModal";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
@@ -27,6 +28,7 @@ const Cards = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [shouldUpdateCards, setShouldUpdateCards] = useState(false);
+  const [isCardsModalOpen, setIsCardsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!shouldUpdateCards) return;
@@ -124,6 +126,11 @@ const Cards = () => {
 
   const checkOwnsership = (ownerId) => ownerId === user.uid;
 
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setIsCardsModalOpen(true);
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Topbar location="/cards" />
@@ -135,7 +142,8 @@ const Cards = () => {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative"
+              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative cursor-pointer"
+              onClick={() => handleCardClick(card)}
             >
               <Header
                 isOwner={checkOwnsership(card.userUUID)}
@@ -162,6 +170,9 @@ const Cards = () => {
           onClose={() => setIsModalOpen(false)}
           cardId={selectedCard.id}
         />
+      )}
+      {isCardsModalOpen && (
+        <CardsModal onClose={() => setIsCardsModalOpen(false)} />
       )}
     </div>
   );
