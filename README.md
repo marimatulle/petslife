@@ -33,15 +33,15 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
     - Foto do pet.
   - Os tutores não podem fazer upload dos comprovantes de vacinação.
 - Para os veterinários:
-  - Na página de carteiras, aparecem apenas as carteiras dos pets que eles atendem;
+  - Na página de carteiras, aparecem apenas as carteiras dos pets que eles atendem, no caso dos pets dos tutores que eles tem adicionado como amigos;
   - O veterinário pode fazer upload dos comprovantes de vacinação.
-- Ambos os usuários possuem um search para pesquisar o pet pelo nome.
+- Ambos os usuários possuem um search para pesquisar o animal pelo nome.
 4) Amigos:
-- Ambos os usuários possuem dois botões no perfil, o de amigos e o de solicitações de amizade;
-- No perfil de um usuário pesquisado, pode ser desfeita a amizade ou enviada uma solicitação de amizade (no caso de veterinário se conectando com tutor ou vice versa), no caso de tutor pesquisando outro tutor ou veterinário pesquisando outro veterinário, eles apenas poderão visualizar o perfil um do outro, pois o intuito da aplicação é conectar tutores com veterinários para assim o veterinário fazer upload dos comprovantes de vacinação na carteira do pet;
+- Ambos os usuários possuem dois botões no perfil, o de amigos e o de solicitações;
+- No perfil de um usuário pesquisado, pode ser enviada uma solicitação de amizade, cancelada a solicitação ou desfeita a amizade (no caso de veterinário se conectando com tutor ou vice versa), no caso de tutor pesquisando outro tutor ou veterinário pesquisando outro veterinário, eles apenas poderão visualizar o perfil um do outro sem a funcionalidade de amizade, pois o intuito da aplicação é conectar tutores com veterinários para assim o veterinário fazer upload dos comprovantes de vacinação na carteira do pet;
 ## Utilização:
 1) Acesse o site e faça o cadastro;
 2) Faça o login com suas credenciais;
-3) Crie uma carteira para cada pet, preenchendo os detalhes necessários;
+3) Crie uma carteira para cada pet, preenchendo as informações necessárias;
 4) Adicione o veterinário à sua conta;
 5) O veterinário fará o upload dos comprovantes de vacinação na carteira.
