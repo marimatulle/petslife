@@ -158,6 +158,7 @@ const Cards = () => {
       </div>
       {isModalOpen && (
         <UpdateCardsModal
+          setShouldUpdateCards={setShouldUpdateCards}
           onClose={() => setIsModalOpen(false)}
           cardId={selectedCard.id}
         />

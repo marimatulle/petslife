@@ -4,7 +4,7 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { database } from "../firebase";
 import { toast } from "react-toastify";
 
-const UpdateCardsModal = ({ onClose, cardId }) => {
+const UpdateCardsModal = ({ onClose, cardId, setShouldUpdateCards }) => {
   const [animalName, setAnimalName] = useState("");
   const [animalSpecies, setAnimalSpecies] = useState("");
   const [animalBreed, setAnimalBreed] = useState("");
@@ -14,28 +14,28 @@ const UpdateCardsModal = ({ onClose, cardId }) => {
   const [isNeutered, setIsNeutered] = useState("");
   const [preExistingIllnesses, setPreExistingIllnesses] = useState("");
 
-     useEffect(() => {
-       const fetchCardData = async () => {
-         const docRef = doc(database, "Cards", cardId);
-         const docSnap = await getDoc(docRef);
+  useEffect(() => {
+    const fetchCardData = async () => {
+      const docRef = doc(database, "Cards", cardId);
+      const docSnap = await getDoc(docRef);
 
-         if (docSnap.exists()) {
-           const data = docSnap.data();
-           setAnimalName(data.animalName);
-           setAnimalSpecies(data.animalSpecies);
-           setAnimalBreed(data.animalBreed);
-           setAnimalSex(data.animalSex);
-           setAnimalAge(data.animalAge);
-           setAnimalColor(data.animalColor);
-           setIsNeutered(data.isNeutered);
-           setPreExistingIllnesses(data.preExistingIllnesses);
-         } else {
-           console.error("No such document!");
-         }
-       };
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setAnimalName(data.animalName);
+        setAnimalSpecies(data.animalSpecies);
+        setAnimalBreed(data.animalBreed);
+        setAnimalSex(data.animalSex);
+        setAnimalAge(data.animalAge);
+        setAnimalColor(data.animalColor);
+        setIsNeutered(data.isNeutered);
+        setPreExistingIllnesses(data.preExistingIllnesses);
+      } else {
+        console.error("No such document!");
+      }
+    };
 
-       fetchCardData();
-     }, [cardId]);
+    fetchCardData();
+  }, [cardId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +54,7 @@ const UpdateCardsModal = ({ onClose, cardId }) => {
       toast.success("Carteira atualizada com sucesso!", {
         position: "top-center",
       });
+      setShouldUpdateCards(true);
       onClose();
     } catch (error) {
       console.error("Error updating document: ", error);
