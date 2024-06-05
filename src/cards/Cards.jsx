@@ -15,23 +15,43 @@ import PetsBarAndButton from "../bars/PetsBarAndButton";
 import UpdateCardsModal from "./UpdateCardsModal";
 import { toast } from "react-toastify";
 import Header from "./Header";
-import Image from './Image'
+import Image from "./Image";
 import Description from "./Description";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
+  const [friendIds, setFriendIds] = useState([]);
   const [loadingCards, setLoadingCards] = useState({});
   const [isHovered, setIsHovered] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [shouldUpdateCards, setShouldUpdateCards] = useState(false);
 
+  useEffect(() => {
+    if (!shouldUpdateCards) return;
+
+    fetchCards(friendIds).then(() => {
+      setShouldUpdateCards(false);
+    });
+  }, [shouldUpdateCards, friendIds]);
+
+  const fetchCards = async (includedIds) => {
+    const cardCollection = collection(database, "Cards");
+    const cardSnapshot = await getDocs(cardCollection);
+    const cardList = cardSnapshot.docs
+      .map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+      .filter((card) => includedIds.includes(card.userUUID));
+    setCards(cardList);
+  };
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
-      console.log({ user })
+      console.log({ user });
       setUser(user);
-  
 
       const receivedRequestsQuery = query(
         collection(database, "FriendRequests"),
@@ -47,21 +67,15 @@ const Cards = () => {
       const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
       const sentRequestsSnapshot = await getDocs(sentRequestsQuery);
 
-      const friendIds = [
+      const friends = [
         ...receivedRequestsSnapshot.docs.map((doc) => doc.data().senderId),
         ...sentRequestsSnapshot.docs.map((doc) => doc.data().receiverId),
         auth.currentUser.uid,
       ];
 
-      const cardCollection = collection(database, "Cards");
-      const cardSnapshot = await getDocs(cardCollection);
-      const cardList = cardSnapshot.docs
-        .map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }))
-        .filter((card) => friendIds.includes(card.userUUID));
-      setCards(cardList);
+      setFriendIds(friends);
+
+      fetchCards(friends);
     });
   }, []);
 
@@ -115,7 +129,7 @@ const Cards = () => {
       <Topbar location="/cards" />
       <div className="flex flex-col sm:flex-row">
         <div className="w-full sm:w-1/4">
-          <PetsBarAndButton />
+          <PetsBarAndButton setShouldUpdateCards={setShouldUpdateCards} />
         </div>
         <div className="w-full sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {cards.map((card) => (
@@ -129,7 +143,8 @@ const Cards = () => {
                 handleDeleteCard={handleDeleteCard}
                 handleEditCard={handleEditCard}
               />
-              <Image card={card} 
+              <Image
+                card={card}
                 isOwner={checkOwnsership(card.userUUID)}
                 handleImageUpload={handleImageUpload}
                 setIsHovered={setIsHovered}

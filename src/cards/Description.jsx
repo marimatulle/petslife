@@ -1,4 +1,4 @@
-const Description = (card) => (
+const Description = ({ card }) => (
   <>
     <h2 className="font-bold text-xl mb-2 mt-4 text-center">
       {card.animalName}
@@ -27,4 +27,4 @@ const Description = (card) => (
   </>
 );
 
-export default Description
+export default Description;

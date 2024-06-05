@@ -4,7 +4,7 @@ import { collection, addDoc, getDoc, doc } from "firebase/firestore";
 import { database, auth } from "../firebase";
 import { toast } from "react-toastify";
 
-const CreateCardsModal = ({ onClose }) => {
+const CreateCardsModal = ({ onClose, setShouldUpdateCards }) => {
   const [animalName, setAnimalName] = useState("");
   const [animalSpecies, setAnimalSpecies] = useState("");
   const [animalBreed, setAnimalBreed] = useState("");
@@ -39,6 +39,7 @@ const CreateCardsModal = ({ onClose }) => {
       toast.success("Carteira cadastrada com sucesso!", {
         position: "top-center",
       });
+      setShouldUpdateCards(true);
       onClose();
     } catch (error) {
       console.error("Error adding document: ", error);

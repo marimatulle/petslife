@@ -6,7 +6,7 @@ import CreateCardsModal from "../cards/CreateCardsModal";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../firebase";
 
-const PetsBarAndButton = () => {
+const PetsBarAndButton = ({ setShouldUpdateCards }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [userType, setUserType] = useState(null);
@@ -62,7 +62,12 @@ const PetsBarAndButton = () => {
           </button>
         )}
       </div>
-      {showModal && <CreateCardsModal onClose={handleCloseModal} />}
+      {showModal && (
+        <CreateCardsModal
+          setShouldUpdateCards={setShouldUpdateCards}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };
