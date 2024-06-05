@@ -17,7 +17,7 @@ const Header = ({ isOwner, card, handleDeleteCard, handleEditCard }) => {
       </button>
     </>
   ) : (
-    <div className="text-center">Tutor: {card.userFullName} </div>
+    <div className="text-center font-bold">Tutor: {card.userFullName} </div>
   );
 };
 
