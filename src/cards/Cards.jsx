@@ -172,7 +172,7 @@ const Cards = () => {
         />
       )}
       {isCardsModalOpen && (
-        <CardsModal onClose={() => setIsCardsModalOpen(false)} />
+        <CardsModal card={selectedCard} onClose={() => setIsCardsModalOpen(false)} />
       )}
     </div>
   );

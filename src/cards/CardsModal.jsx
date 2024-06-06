@@ -1,26 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoClose, IoArrowForward, IoArrowBack } from "react-icons/io5";
-import { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
+import { collection, getDocs } from "firebase/firestore";
+import { database } from "../firebase";
+import VaccineForm from "./VaccineForm";
 
-const CardsModal = ({ onClose }) => {
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const storageRef = ref(storage, `vaccines/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+const CardsModal = ({ onClose, card }) => {
+  const [vaccines, setVaccines] = useState([]);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.error(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(`Arquivo disponível em: ${downloadURL}`);
-        });
-      }
-    );
+  useEffect(() => {
+    fetchVaccines();
+  }, []);
+
+  const fetchVaccines = async () => {
+    const vaccinesCollection = collection(database, "Vaccines");
+    const vaccinesSnapshot = await getDocs(vaccinesCollection);
+    const vaccinesList = vaccinesSnapshot.docs
+      .map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+      .filter((vaccine) => vaccine.cardId === card.id);
+    setVaccines(vaccinesList);
   };
 
   return (
@@ -40,7 +40,7 @@ const CardsModal = ({ onClose }) => {
           aria-hidden="true"
         ></span>
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-auto mx-auto sm:my-8 sm:align-middle w-full sm:max-w-lg">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className="bg-white h-[400px] px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                 <h3
@@ -49,8 +49,22 @@ const CardsModal = ({ onClose }) => {
                 >
                   Vacinas:
                 </h3>
+                <VaccineForm card={card} fetchVaccines={fetchVaccines} />
                 <div className="mt-2">
-                  <input type="file" onChange={handleImageUpload} />
+                  {vaccines.map((vaccine) => (
+                    <div
+                      key={vaccine.id}
+                      className="border-2 border-gray-300 rounded-lg p-2 mb-2 relative"
+                    >
+                      {vaccine.vaccineURL && (
+                        <img
+                          src={vaccine.vaccineURL}
+                          alt="comprovante"
+                          className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
               <button
@@ -59,16 +73,12 @@ const CardsModal = ({ onClose }) => {
               >
                 <IoClose size={24} />
               </button>
-              <div className="flex w-full h-full">
-                <button className="absolute top-1/2 left-0 transform -translate-y-1/2 m-2 bg-orange-300 hover:bg-orange-400 text-white rounded w-8 h-8 flex items-center justify-center">
-                  <IoArrowBack size={24} />
-                </button>
-              </div>
-              <div className="flex w-full h-full">
-                <button className="absolute top-1/2 right-0 transform -translate-y-1/2 m-2 bg-orange-300 hover:bg-orange-400 text-white rounded w-8 h-8 flex items-center justify-center">
-                  <IoArrowForward size={24} />
-                </button>
-              </div>
+              <button className="absolute top-1/2 left-0 transform -translate-y-1/2 m-2 bg-orange-300 hover:bg-orange-400 text-white rounded w-8 h-8 flex items-center justify-center">
+                <IoArrowBack size={24} />
+              </button>
+              <button className="absolute top-1/2 right-0 transform -translate-y-1/2 m-2 bg-orange-300 hover:bg-orange-400 text-white rounded w-8 h-8 flex items-center justify-center">
+                <IoArrowForward size={24} />
+              </button>
             </div>
           </div>
         </div>
