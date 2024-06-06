@@ -3,9 +3,11 @@ import { IoClose, IoArrowForward, IoArrowBack } from "react-icons/io5";
 import { collection, getDocs } from "firebase/firestore";
 import { database } from "../firebase";
 import VaccineForm from "./VaccineForm";
+import VaccineGrid from "./VaccineGrid";
 
-const CardsModal = ({ onClose, card }) => {
+const CardsModal = ({ onClose, card, isVet }) => {
   const [vaccines, setVaccines] = useState([]);
+  const [showForm, toggleForm] = useState(false);
 
   useEffect(() => {
     fetchVaccines();
@@ -49,23 +51,20 @@ const CardsModal = ({ onClose, card }) => {
                 >
                   Vacinas:
                 </h3>
-                <VaccineForm card={card} fetchVaccines={fetchVaccines} />
-                <div className="mt-2">
-                  {vaccines.map((vaccine) => (
-                    <div
-                      key={vaccine.id}
-                      className="border-2 border-gray-300 rounded-lg p-2 mb-2 relative"
-                    >
-                      {vaccine.vaccineURL && (
-                        <img
-                          src={vaccine.vaccineURL}
-                          alt="comprovante"
-                          className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                {isVet && (
+                  <button onClick={() => toggleForm(true)}>
+                    Adicionar Vacina
+                  </button>
+                )}
+                {showForm ? (
+                  <VaccineForm
+                    card={card}
+                    fetchVaccines={fetchVaccines}
+                    toggleForm={() => toggleForm(false)}
+                  />
+                ) : (
+                  <VaccineGrid vaccines={vaccines} />
+                )}
               </div>
               <button
                 onClick={onClose}

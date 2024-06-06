@@ -5,7 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { database } from "../firebase";
 import { toast } from "react-toastify";
 
-const VaccineForm = ({ fetchVaccines, card }) => {
+const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
   const [urlUploaded, setUrlUploaded] = useState("");
   const [vaccineDate, setVaccineDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
@@ -26,6 +26,7 @@ const VaccineForm = ({ fetchVaccines, card }) => {
         position: "top-center",
       });
       fetchVaccines();
+      toggleForm();
     } catch (error) {
       console.error("Error adding document: ", error);
       toast.error("Algum problema ocorreu no anexo do comprovante.", {

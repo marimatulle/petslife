@@ -5,6 +5,7 @@ import {
   doc,
   collection,
   getDocs,
+  getDoc,
   setDoc,
   deleteDoc,
   query,
@@ -17,7 +18,7 @@ import { toast } from "react-toastify";
 import Header from "./Header";
 import Image from "./Image";
 import Description from "./Description";
-import CardsModal from "./CardsModal";
+import VaccinesModal from "./VaccinesModal";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
@@ -28,7 +29,8 @@ const Cards = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [shouldUpdateCards, setShouldUpdateCards] = useState(false);
-  const [isCardsModalOpen, setIsCardsModalOpen] = useState(false);
+  const [isVaccinesModalOpen, setIsVaccinesModalOpen] = useState(false);
+  const [isVet, setIsVet] = useState(null);
 
   useEffect(() => {
     if (!shouldUpdateCards) return;
@@ -37,6 +39,17 @@ const Cards = () => {
       setShouldUpdateCards(false);
     });
   }, [shouldUpdateCards, friendIds]);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      let vetRef = doc(database, "Veterinarians", auth.currentUser.uid);
+      let vetSnap = await getDoc(vetRef);
+
+      setIsVet(!!vetSnap.exists());
+    };
+
+    fetchUserType();
+  }, []);
 
   const fetchCards = async (includedIds) => {
     const cardCollection = collection(database, "Cards");
@@ -128,7 +141,7 @@ const Cards = () => {
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
-    setIsCardsModalOpen(true);
+    setIsVaccinesModalOpen(true);
   };
 
   return (
@@ -136,7 +149,7 @@ const Cards = () => {
       <Topbar location="/cards" />
       <div className="flex flex-col sm:flex-row">
         <div className="w-full sm:w-1/4">
-          <PetsBarAndButton setShouldUpdateCards={setShouldUpdateCards} />
+          <PetsBarAndButton setShouldUpdateCards={setShouldUpdateCards} isVet={isVet}/>
         </div>
         <div className="w-full sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {cards.map((card) => (
@@ -171,8 +184,8 @@ const Cards = () => {
           cardId={selectedCard.id}
         />
       )}
-      {isCardsModalOpen && (
-        <CardsModal card={selectedCard} onClose={() => setIsCardsModalOpen(false)} />
+      {isVaccinesModalOpen && (
+        <VaccinesModal card={selectedCard} isVet={isVet} onClose={() => setIsVaccinesModalOpen(false)} />
       )}
     </div>
   );
