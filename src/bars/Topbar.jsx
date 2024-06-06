@@ -3,14 +3,24 @@ import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaPaw, FaSignOutAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase"; 
 
 const Topbar = () => {
   const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/login");
-    toast.success("Logout feito com sucesso", {
-      position: "top-center",
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+      toast.success("Logout feito com sucesso", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Erro ao fazer logout.", {
+        position: "bottom-center",
+      });
+    }
   };
 
   return (

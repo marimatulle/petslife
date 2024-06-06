@@ -65,7 +65,6 @@ const Cards = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
-      console.log({ user });
       setUser(user);
 
       const receivedRequestsQuery = query(
