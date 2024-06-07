@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import CreateCardsModal from "../cards/CreateCardsModal";
+import CreateCardModal from "../cards/CreateCardModal";
 
 const PetsBarAndButton = ({ setShouldUpdateCards, isVet }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +45,7 @@ const PetsBarAndButton = ({ setShouldUpdateCards, isVet }) => {
         )}
       </div>
       {showModal && (
-        <CreateCardsModal
+        <CreateCardModal
           setShouldUpdateCards={setShouldUpdateCards}
           onClose={handleCloseModal}
         />
