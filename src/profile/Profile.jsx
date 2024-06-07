@@ -30,15 +30,17 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       auth.onAuthStateChanged(async (user) => {
-        let docRef = doc(database, "RegularUsers", user.uid);
-        let docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUser(docSnap.data());
-        } else {
-          docRef = doc(database, "Veterinarians", user.uid);
-          docSnap = await getDoc(docRef);
+        if (user) {
+          let docRef = doc(database, "RegularUsers", user.uid);
+          let docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setUser(docSnap.data());
+          } else {
+            docRef = doc(database, "Veterinarians", user.uid);
+            docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              setUser(docSnap.data());
+            }
           }
         }
       });
@@ -48,25 +50,17 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    const q = query(
-      collection(database, "FriendRequests"),
-      where("receiverId", "==", auth.currentUser.uid),
-      where("status", "==", "pending")
-    );
+    if (auth.currentUser) {
+      const q = query(
+        collection(database, "FriendRequests"),
+        where("receiverId", "==", auth.currentUser.uid),
+        where("status", "==", "pending")
+      );
 
-    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      const requestsPromises = querySnapshot.docs.map(async (document) => {
-        const senderId = document.data().senderId;
-        const senderDocRef = doc(database, "RegularUsers", senderId);
-        const senderDocSnap = await getDoc(senderDocRef);
-        if (senderDocSnap.exists()) {
-          return {
-            id: document.id,
-            sender: senderDocSnap.data(),
-            ...document.data(),
-          };
-        } else {
-          const senderDocRef = doc(database, "Veterinarians", senderId);
+      const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+        const requestsPromises = querySnapshot.docs.map(async (document) => {
+          const senderId = document.data().senderId;
+          const senderDocRef = doc(database, "RegularUsers", senderId);
           const senderDocSnap = await getDoc(senderDocRef);
           if (senderDocSnap.exists()) {
             return {
@@ -74,14 +68,24 @@ const Profile = () => {
               sender: senderDocSnap.data(),
               ...document.data(),
             };
+          } else {
+            const senderDocRef = doc(database, "Veterinarians", senderId);
+            const senderDocSnap = await getDoc(senderDocRef);
+            if (senderDocSnap.exists()) {
+              return {
+                id: document.id,
+                sender: senderDocSnap.data(),
+                ...document.data(),
+              };
+            }
           }
-        }
+        });
+        const requests = await Promise.all(requestsPromises);
+        setRequests(requests);
       });
-      const requests = await Promise.all(requestsPromises);
-      setRequests(requests);
-    });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }
   }, []);
 
   const handleImageUpload = (e) => {

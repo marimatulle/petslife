@@ -8,13 +8,21 @@ import { auth } from "../firebase";
 
 const Topbar = () => {
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      navigate("/login");
-      toast.success("Logout feito com sucesso", {
-        position: "top-center",
-      });
+      if (auth && auth.currentUser) {
+        await signOut(auth);
+        navigate("/login");
+        toast.success("Logout feito com sucesso", {
+          position: "top-center",
+        });
+      } else {
+        console.error("Nenhum usuário está atualmente logado.");
+        toast.error("Nenhum usuário está atualmente logado.", {
+          position: "bottom-center",
+        });
+      }
     } catch (error) {
       console.error(error.message);
       toast.error("Erro ao fazer logout.", {
@@ -22,6 +30,7 @@ const Topbar = () => {
       });
     }
   };
+
 
   return (
     <div className="bg-white p-6 flex flex-col sm:flex-row justify-between items-center">

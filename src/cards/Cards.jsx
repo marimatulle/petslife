@@ -13,12 +13,12 @@ import {
 } from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import PetsBarAndButton from "../bars/PetsBarAndButton";
-import UpdateCardsModal from "./UpdateCardsModal";
+import UpdateCardModal from "./UpdateCardModal";
 import { toast } from "react-toastify";
-import Header from "./Header";
-import Image from "./Image";
-import Description from "./Description";
-import VaccinesModal from "./VaccinesModal";
+import CardHeader from "./CardHeader";
+import CardImage from "./CardImage";
+import CardDescription from "./CardDescription";
+import Vaccines from "./Vaccines";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
@@ -65,32 +65,35 @@ const Cards = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
-      setUser(user);
+      if (user) {
+        setUser(user);
 
-      const receivedRequestsQuery = query(
-        collection(database, "FriendRequests"),
-        where("receiverId", "==", auth.currentUser.uid),
-        where("status", "==", "accepted")
-      );
-      const sentRequestsQuery = query(
-        collection(database, "FriendRequests"),
-        where("senderId", "==", auth.currentUser.uid),
-        where("status", "==", "accepted")
-      );
+        const receivedRequestsQuery = query(
+          collection(database, "FriendRequests"),
+          where("receiverId", "==", auth.currentUser.uid),
+          where("status", "==", "accepted")
+        );
+        const sentRequestsQuery = query(
+          collection(database, "FriendRequests"),
+          where("senderId", "==", auth.currentUser.uid),
+          where("status", "==", "accepted")
+        );
 
-      const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
-      const sentRequestsSnapshot = await getDocs(sentRequestsQuery);
+        const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
+        const sentRequestsSnapshot = await getDocs(sentRequestsQuery);
 
-      const friends = [
-        ...receivedRequestsSnapshot.docs.map((doc) => doc.data().senderId),
-        ...sentRequestsSnapshot.docs.map((doc) => doc.data().receiverId),
-        auth.currentUser.uid,
-      ];
+        const friends = [
+          ...receivedRequestsSnapshot.docs.map((doc) => doc.data().senderId),
+          ...sentRequestsSnapshot.docs.map((doc) => doc.data().receiverId),
+          auth.currentUser.uid,
+        ];
 
-      setFriendIds(friends);
+        setFriendIds(friends);
 
-      fetchCards(friends);
+        fetchCards(friends);
+      }
     });
+
   }, []);
 
   const handleImageUpload = async (e, card) => {
@@ -157,13 +160,13 @@ const Cards = () => {
               className="border border-gray-300 p-4 rounded-lg bg-white shadow relative cursor-pointer"
               onClick={() => handleCardClick(card)}
             >
-              <Header
+              <CardHeader
                 isOwner={checkOwnsership(card.userUUID)}
                 card={card}
                 handleDeleteCard={handleDeleteCard}
                 handleEditCard={handleEditCard}
               />
-              <Image
+              <CardImage
                 card={card}
                 isOwner={checkOwnsership(card.userUUID)}
                 handleImageUpload={handleImageUpload}
@@ -171,20 +174,20 @@ const Cards = () => {
                 loadingCards={loadingCards}
                 isHovered={isHovered}
               />
-              <Description card={card} />
+              <CardDescription card={card} />
             </div>
           ))}
         </div>
       </div>
       {isModalOpen && (
-        <UpdateCardsModal
+        <UpdateCardModal
           setShouldUpdateCards={setShouldUpdateCards}
           onClose={() => setIsModalOpen(false)}
           cardId={selectedCard.id}
         />
       )}
       {isVaccinesModalOpen && (
-        <VaccinesModal card={selectedCard} isVet={isVet} onClose={() => setIsVaccinesModalOpen(false)} />
+        <Vaccines card={selectedCard} isVet={isVet} onClose={() => setIsVaccinesModalOpen(false)} />
       )}
     </div>
   );
