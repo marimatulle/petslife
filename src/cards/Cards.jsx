@@ -18,7 +18,6 @@ import { toast } from "react-toastify";
 import CardHeader from "./CardHeader";
 import CardImage from "./CardImage";
 import CardDescription from "./CardDescription";
-import Vaccines from "./Vaccines";
 
 const Cards = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +28,6 @@ const Cards = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [shouldUpdateCards, setShouldUpdateCards] = useState(false);
-  const [isVaccinesModalOpen, setIsVaccinesModalOpen] = useState(false);
   const [isVet, setIsVet] = useState(null);
 
   useEffect(() => {
@@ -143,7 +141,6 @@ const Cards = () => {
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
-    setIsVaccinesModalOpen(true);
   };
 
   return (
@@ -157,7 +154,7 @@ const Cards = () => {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative cursor-pointer"
+              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative"
               onClick={() => handleCardClick(card)}
             >
               <CardHeader
@@ -185,9 +182,6 @@ const Cards = () => {
           onClose={() => setIsModalOpen(false)}
           cardId={selectedCard.id}
         />
-      )}
-      {isVaccinesModalOpen && (
-        <Vaccines card={selectedCard} isVet={isVet} onClose={() => setIsVaccinesModalOpen(false)} />
       )}
     </div>
   );

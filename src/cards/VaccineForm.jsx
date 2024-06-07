@@ -59,7 +59,7 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         <input
           className="border-2 border-gray-100 rounded-xl mt-1 bg-transparent"
           placeholder="DD/MM/YYYY"
-          type="text"
+          type="date"
           value={vaccineDate}
           onChange={(event) => setVaccineDate(event.target.value)}
           required
@@ -70,10 +70,9 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         <input
           className="border-2 border-gray-100 rounded-xl mt-1 bg-transparent"
           placeholder="DD/MM/YYYY"
-          type="text"
+          type="date"
           value={returnDate}
           onChange={(event) => setReturnDate(event.target.value)}
-          required
         />
       </label>
       <label className="mb-4 text-black font-medium">

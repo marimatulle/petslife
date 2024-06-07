@@ -15,6 +15,7 @@ import Profile from "./profile/Profile";
 import Cards from "./cards/Cards";
 import Search from "./search/Search";
 import SearchedUserProfile from "./search/SearchedUserProfile";
+import Vaccines from "./cards/Vaccines";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -55,6 +56,12 @@ const App = () => {
           path="/userprofile/:userId"
           element={
             currentUser ? <SearchedUserProfile /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/vaccines/:cardId"
+          element={
+            currentUser ? <Vaccines /> : <Navigate to="/login" />
           }
         />
       </Routes>

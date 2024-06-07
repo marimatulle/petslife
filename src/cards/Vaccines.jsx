@@ -5,13 +5,15 @@ import { database } from "../firebase";
 import VaccineForm from "./VaccineForm";
 import VaccineGrid from "./VaccineGrid";
 
-const CardsModal = ({ onClose, card, isVet }) => {
+const Vaccines = ({ onClose, card, isVet }) => {
   const [vaccines, setVaccines] = useState([]);
   const [showForm, toggleForm] = useState(false);
 
   useEffect(() => {
-    fetchVaccines();
-  }, []);
+    if (card) {
+      fetchVaccines();
+    }
+  }, [card]);
 
   const fetchVaccines = async () => {
     const vaccinesCollection = collection(database, "Vaccines");
@@ -86,4 +88,4 @@ const CardsModal = ({ onClose, card, isVet }) => {
   );
 };
 
-export default CardsModal;
+export default Vaccines;
