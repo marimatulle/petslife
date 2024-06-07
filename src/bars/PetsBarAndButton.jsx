@@ -38,7 +38,9 @@ const PetsBarAndButton = ({ setShouldUpdateCards, isVet }) => {
         {!isVet && (
           <button
             onClick={handleOpenModal}
-            className="mr-4 bg-orange-300 hover:bg-orange-400 text-white rounded-xl w-12 h-12 flex items-center justify-center text-2xl font-bold md:w-12 md:h-12 md:text-2xl"
+            className="mr-4 bg-orange-300 hover:bg-orange-400 text-white rounded-xl w-12 h-12 flex items-center 
+                      justify-center text-2xl font-bold md:w-12 md:h-12 md:text-2xl active:scale-[.98]
+                      active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
           >
             <AiOutlinePlus />
           </button>
