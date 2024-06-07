@@ -22,7 +22,6 @@ const FriendshipRequestsModal = ({ onClose }) => {
       where("status", "==", "pending")
     );
 
-
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const requestsPromises = querySnapshot.docs.map(async (document) => {
         const senderId = document.data().senderId;
@@ -121,13 +120,13 @@ const FriendshipRequestsModal = ({ onClose }) => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleAccept(request.id)}
-                        className="text-green-500 text-4xl"
+                        className="text-green-400 hover:text-green-500 text-4xl"
                       >
                         <IoCheckmarkCircle />
                       </button>
                       <button
                         onClick={() => handleReject(request.id)}
-                        className="text-red-500 text-4xl"
+                        className="text-red-400 hover:text-red-500 text-4xl"
                       >
                         <IoCloseCircle />
                       </button>
