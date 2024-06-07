@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
 import CreateCardModal from "../cards/CreateCardModal";
 
-const PetsBarAndButton = ({ setShouldUpdateCards, isVet }) => {
+const PetsBarAndButton = ({
+  setShouldUpdateCards,
+  updateSearchTerm,
+  isVet,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
 
   const handleSearch = (event) => {
     if (event.key === "Enter") {
-      navigate(`/search?query=${searchTerm}`);
+      updateSearchTerm(searchTerm);
+      setShouldUpdateCards(true);
     }
   };
 
@@ -22,7 +25,7 @@ const PetsBarAndButton = ({ setShouldUpdateCards, isVet }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
+  
   return (
     <div className="relative flex items-center justify-between md:justify-start">
       <FaSearch className="absolute top-1/2 left-8 transform -translate-y-1/2 text-gray-500 text-2xl" />

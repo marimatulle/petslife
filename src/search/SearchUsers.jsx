@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { database } from "../firebase";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import Topbar from "../bars/Topbar";
@@ -11,7 +10,7 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const Search = () => {
+const SearchUsers = () => {
   const queryParam = useQuery();
   const [users, setUsers] = useState([]);
   const searchTerm = queryParam.get("query");
@@ -46,12 +45,6 @@ const Search = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Topbar location="/search" />
-      <InfiniteScroll
-        dataLength={users.length}
-        next={fetchUsers}
-        hasMore={true}
-        loader={<h4>Loading...</h4>}
-      >
         {users.map((user) => (
           <Link to={`/userprofile/${user.id}`} key={user.id}>
             <div className="flex items-center space-x-4 p-2 mb-2 border-b-2 border-gray-200 hover:bg-orange-300">
@@ -73,9 +66,8 @@ const Search = () => {
             </div>
           </Link>
         ))}
-      </InfiniteScroll>
     </div>
   );
 };
 
-export default Search;
+export default SearchUsers;

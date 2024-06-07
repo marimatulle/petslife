@@ -13,7 +13,7 @@ import Login from "./login/Login";
 import Register from "./register/Register";
 import Profile from "./profile/Profile";
 import Cards from "./cards/Cards";
-import Search from "./search/Search";
+import SearchUsers from "./search/SearchUsers";
 import SearchedUserProfile from "./search/SearchedUserProfile";
 import Vaccines from "./cards/Vaccines";
 
@@ -50,7 +50,7 @@ const App = () => {
         />
         <Route
           path="/search"
-          element={currentUser ? <Search /> : <Navigate to="/login" />}
+          element={currentUser ? <SearchUsers /> : <Navigate to="/login" />}
         />
         <Route
           path="/userprofile/:userId"

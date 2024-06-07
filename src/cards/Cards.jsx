@@ -22,6 +22,7 @@ import CardDescription from "./CardDescription";
 const Cards = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [friendIds, setFriendIds] = useState([]);
   const [loadingCards, setLoadingCards] = useState({});
   const [isHovered, setIsHovered] = useState({});
@@ -57,9 +58,16 @@ const Cards = () => {
         ...doc.data(),
         id: doc.id,
       }))
-      .filter((card) => includedIds.includes(card.userUUID));
+      .filter((card) => includedIds.includes(card.userUUID))
+      .filter((card) =>
+        card.animalName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     setCards(cardList);
   };
+
+  useEffect(() => {
+    fetchCards(friendIds);
+  }, [searchTerm, friendIds]);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -91,7 +99,6 @@ const Cards = () => {
         fetchCards(friends);
       }
     });
-
   }, []);
 
   const handleImageUpload = async (e, card) => {
@@ -148,7 +155,11 @@ const Cards = () => {
       <Topbar location="/cards" />
       <div className="flex flex-col sm:flex-row">
         <div className="w-full sm:w-1/4">
-          <PetsBarAndButton setShouldUpdateCards={setShouldUpdateCards} isVet={isVet}/>
+          <PetsBarAndButton
+            setShouldUpdateCards={setShouldUpdateCards}
+            updateSearchTerm={setSearchTerm}
+            isVet={isVet}
+          />
         </div>
         <div className="w-full sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {cards.map((card) => (
