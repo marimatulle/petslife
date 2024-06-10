@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
-import { AiOutlinePlus } from "react-icons/ai";
-import CreateCardModal from "../cards/CreateCardModal";
+import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { AiOutlinePlus } from 'react-icons/ai';
+import CreateCardModal from '../pets/CreateCardModal';
 
 const PetsBarAndButton = ({
   setShouldUpdateCards,
   updateSearchTerm,
   isVet,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const handleSearch = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       updateSearchTerm(searchTerm);
       setShouldUpdateCards(true);
     }
@@ -25,7 +25,7 @@ const PetsBarAndButton = ({
   const handleCloseModal = () => {
     setShowModal(false);
   };
-  
+
   return (
     <div className="relative flex items-center justify-between md:justify-start">
       <FaSearch className="absolute top-1/2 left-8 transform -translate-y-1/2 text-gray-500 text-2xl" />
@@ -43,8 +43,7 @@ const PetsBarAndButton = ({
             onClick={handleOpenModal}
             className="mr-4 bg-orange-300 hover:bg-orange-400 text-white rounded-xl w-12 h-12 flex items-center 
                       justify-center text-2xl font-bold md:w-12 md:h-12 md:text-2xl active:scale-[.98]
-                      active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-          >
+                      active:duration-75 transition-all hover:scale-[1.01] ease-in-out">
             <AiOutlinePlus />
           </button>
         )}

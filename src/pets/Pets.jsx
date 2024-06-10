@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Topbar from "../bars/Topbar";
-import { auth, database, storage } from "../firebase";
+import React, { useEffect, useState } from 'react';
+import Topbar from '../bars/Topbar';
+import { auth, database, storage } from '../firebase';
 import {
   doc,
   collection,
@@ -10,19 +10,20 @@ import {
   deleteDoc,
   query,
   where,
-} from "firebase/firestore";
-import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
-import PetsBarAndButton from "../bars/PetsBarAndButton";
-import UpdateCardModal from "./UpdateCardModal";
-import { toast } from "react-toastify";
-import CardHeader from "./CardHeader";
-import CardImage from "./CardImage";
-import CardDescription from "./CardDescription";
+} from 'firebase/firestore';
+import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
+import PetsBarAndButton from '../bars/PetsBarAndButton';
+import UpdateCardModal from './UpdateCardModal';
+import { toast } from 'react-toastify';
+import CardHeader from './CardHeader';
+import CardImage from './CardImage';
+import CardDescription from '../components/CardDescription';
+import CardTemplate from '../components/CartTemplate';
 
-const Cards = () => {
+const Pets = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [friendIds, setFriendIds] = useState([]);
   const [loadingCards, setLoadingCards] = useState({});
   const [isHovered, setIsHovered] = useState({});
@@ -41,7 +42,7 @@ const Cards = () => {
 
   useEffect(() => {
     const fetchUserType = async () => {
-      let vetRef = doc(database, "Veterinarians", auth.currentUser.uid);
+      let vetRef = doc(database, 'Veterinarians', auth.currentUser.uid);
       let vetSnap = await getDoc(vetRef);
 
       setIsVet(!!vetSnap.exists());
@@ -51,7 +52,7 @@ const Cards = () => {
   }, []);
 
   const fetchCards = async (includedIds) => {
-    const cardCollection = collection(database, "Cards");
+    const cardCollection = collection(database, 'Cards');
     const cardSnapshot = await getDocs(cardCollection);
     const cardList = cardSnapshot.docs
       .map((doc) => ({
@@ -75,14 +76,14 @@ const Cards = () => {
         setUser(user);
 
         const receivedRequestsQuery = query(
-          collection(database, "FriendRequests"),
-          where("receiverId", "==", auth.currentUser.uid),
-          where("status", "==", "accepted")
+          collection(database, 'FriendRequests'),
+          where('receiverId', '==', auth.currentUser.uid),
+          where('status', '==', 'accepted')
         );
         const sentRequestsQuery = query(
-          collection(database, "FriendRequests"),
-          where("senderId", "==", auth.currentUser.uid),
-          where("status", "==", "accepted")
+          collection(database, 'FriendRequests'),
+          where('senderId', '==', auth.currentUser.uid),
+          where('status', '==', 'accepted')
         );
 
         const receivedRequestsSnapshot = await getDocs(receivedRequestsQuery);
@@ -110,20 +111,20 @@ const Cards = () => {
     );
 
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {},
       (error) => {
         console.error(error);
         setLoadingCards((prev) => ({ ...prev, [card.id]: false }));
-        toast.error("Erro ao carregar imagem", {
-          position: "bottom-center",
+        toast.error('Erro ao carregar imagem', {
+          position: 'bottom-center',
         });
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           card.photoURL = downloadURL;
           setLoadingCards((prev) => ({ ...prev, [card.id]: false }));
-          const cardDocRef = doc(database, "Cards", card.id);
+          const cardDocRef = doc(database, 'Cards', card.id);
           setDoc(cardDocRef, { photoURL: downloadURL }, { merge: true });
         });
       }
@@ -131,11 +132,11 @@ const Cards = () => {
   };
 
   const handleDeleteCard = async (card) => {
-    const cardDocRef = doc(database, "Cards", card.id);
+    const cardDocRef = doc(database, 'Cards', card.id);
     await deleteDoc(cardDocRef);
     setCards(cards.filter((c) => c.id !== card.id));
-    toast.success("Carteira excluída com sucesso!", {
-      position: "top-center",
+    toast.success('Carteira excluída com sucesso!', {
+      position: 'top-center',
     });
   };
 
@@ -163,12 +164,12 @@ const Cards = () => {
         </div>
         <div className="w-full sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {cards.map((card) => (
-            <div
+            <CardTemplate
               key={card.id}
-              className="border border-gray-300 p-4 rounded-lg bg-white shadow relative"
-              onClick={() => handleCardClick(card)}
-            >
+              callback={() => handleCardClick(card)}
+              card={card}>
               <CardHeader
+                isVet={isVet}
                 isOwner={checkOwnsership(card.userUUID)}
                 card={card}
                 handleDeleteCard={handleDeleteCard}
@@ -182,8 +183,22 @@ const Cards = () => {
                 loadingCards={loadingCards}
                 isHovered={isHovered}
               />
-              <CardDescription card={card} />
-            </div>
+              <CardDescription
+                title={card.animalName}
+                list={[
+                  { key: 'Espécie', value: card.animalSpecies },
+                  { key: 'Raça', value: card.animalBreed },
+                  { key: 'Sexo', value: card.animalSex },
+                  { key: 'Idade', value: card.animalAge },
+                  { key: 'Idade', value: card.animalColor },
+                  { key: 'Castrado', value: card.isNeutered },
+                  {
+                    key: 'Doenças pré-existentes',
+                    value: card.preExistingIllnesses,
+                  },
+                ]}
+              />
+            </CardTemplate>
           ))}
         </div>
       </div>
@@ -198,4 +213,4 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default Pets;

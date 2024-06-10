@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
-import Login from "./login/Login";
-import Register from "./register/Register";
-import Profile from "./profile/Profile";
-import Cards from "./cards/Cards";
-import SearchUsers from "./search/SearchUsers";
-import SearchedUserProfile from "./search/SearchedUserProfile";
-import Vaccines from "./cards/Vaccines";
+import Login from './login/Login';
+import Register from './register/Register';
+import Profile from './profile/Profile';
+import Pets from './pets/Pets';
+import SearchUsers from './search/SearchUsers';
+import SearchedUserProfile from './search/SearchedUserProfile';
+import Vaccines from './vaccines/Vaccines';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -46,7 +41,7 @@ const App = () => {
         />
         <Route
           path="/cards"
-          element={currentUser ? <Cards /> : <Navigate to="/login" />}
+          element={currentUser ? <Pets /> : <Navigate to="/login" />}
         />
         <Route
           path="/search"
@@ -60,9 +55,7 @@ const App = () => {
         />
         <Route
           path="/vaccines/:cardId"
-          element={
-            currentUser ? <Vaccines /> : <Navigate to="/login" />
-          }
+          element={currentUser ? <Vaccines /> : <Navigate to="/login" />}
         />
       </Routes>
       <ToastContainer />

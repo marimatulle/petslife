@@ -1,20 +1,21 @@
-import React, { useState } from "react";
-import { storage } from "../firebase";
-import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
-import { database } from "../firebase";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { storage } from '../firebase';
+import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { database } from '../firebase';
+import { toast } from 'react-toastify';
 
 const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
-  const [urlUploaded, setUrlUploaded] = useState("");
-  const [vaccineDate, setVaccineDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
-  const [veterinary, setVeterinary] = useState("");
-  const [crmv, setCrmv] = useState("");
+  const [urlUploaded, setUrlUploaded] = useState('');
+  const [vaccineName, setVaccineName] = useState('');
+  const [vaccineDate, setVaccineDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [veterinary, setVeterinary] = useState('');
+  const [crmv, setCrmv] = useState('');
 
   const addVaccine = async () => {
     try {
-      await addDoc(collection(database, "Vaccines"), {
+      await addDoc(collection(database, 'Vaccines'), {
         cardId: card.id,
         vaccineURL: urlUploaded,
         vaccineDate: vaccineDate,
@@ -22,15 +23,15 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         veterinary: veterinary,
         crmv: crmv,
       });
-      toast.success("Comprovante anexado com sucesso!", {
-        position: "top-center",
+      toast.success('Comprovante anexado com sucesso!', {
+        position: 'top-center',
       });
       fetchVaccines();
       toggleForm();
     } catch (error) {
-      console.error("Error adding document: ", error);
-      toast.error("Algum problema ocorreu no anexo do comprovante.", {
-        position: "bottom-center",
+      console.error('Error adding document: ', error);
+      toast.error('Algum problema ocorreu no anexo do comprovante.', {
+        position: 'bottom-center',
       });
     }
   };
@@ -41,7 +42,7 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {},
       (error) => {
         console.error(error);
@@ -53,7 +54,18 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
   };
 
   return (
-    <>
+    <div className="flex flex-col bg-white p-4">
+      <label className="mb-4 text-black font-medium">
+        Vacina:
+        <input
+          className="border-2 border-gray-100 rounded-xl mt-1 bg-transparent"
+          placeholder="Nome da vacina"
+          type="text"
+          value={vaccineName}
+          onChange={(event) => setVaccineName(event.target.value)}
+          required
+        />
+      </label>
       <label className="mb-4 text-black font-medium">
         Data da Vacina:
         <input
@@ -79,7 +91,7 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         Veterinário:
         <input
           className="border-2 border-gray-100 rounded-xl mt-1 bg-transparent"
-          placeholder="Digite o nome do veterinário"
+          placeholder="Nome do veterinário"
           type="text"
           value={veterinary}
           onChange={(event) => setVeterinary(event.target.value)}
@@ -90,7 +102,7 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         CRMV:
         <input
           className="border-2 border-gray-100 rounded-xl mt-1 bg-transparent"
-          placeholder="Digite o CRMV do veterinário"
+          placeholder="UF-00000"
           type="text"
           value={crmv}
           onChange={(event) => setCrmv(event.target.value)}
@@ -108,12 +120,11 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
         <button
           onClick={addVaccine}
           type="button"
-          className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold"
-        >
+          className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold">
           Cadastrar
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
