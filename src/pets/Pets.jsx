@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import CardHeader from './CardHeader';
 import CardImage from './CardImage';
 import CardDescription from '../components/CardDescription';
-import CardTemplate from '../components/CartTemplate';
+import CardTemplate from '../components/CardTemplate';
 
 const Pets = () => {
   const [user, setUser] = useState(null);
