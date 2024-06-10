@@ -1,4 +1,6 @@
 # Petslife - Carteira de Vacinação Virtual para Pets
+## Acesse o site aqui: https://petslife-vaccines.vercel.app
+![petslife-logo](https://github.com/marimatulle/petslife/assets/108779620/28df9b14-72d1-4c42-8aba-f4f298275718)
 ## Introdução:
 O projeto consiste em uma carteira de vacinação virtual para pets, que visa facilitar o acompanhamento das vacinas e cuidados de saúde dos animais de estimação. Neste README, explicarei o que o projeto faz, seu objetivo e como utilizá-lo.
 ## Objetivo:
@@ -31,10 +33,10 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
     - Se é castrado;
     - Doenças pré-existentes;
     - Foto do pet.
-  - Os tutores não podem fazer upload dos comprovantes de vacinação.
+  - Os tutores não podem fazer upload dos comprovantes de vacinação, mas podem visualizá-los clicando em "Vacinas".
 - Para os veterinários:
   - Na página de carteiras, aparecem apenas as carteiras dos pets que eles atendem, no caso dos pets dos tutores que eles tem adicionado como amigos;
-  - O veterinário pode fazer upload dos comprovantes de vacinação.
+  - O veterinário pode fazer upload dos comprovantes de vacinação clicando no botão "Vacinas" e em "Anexar".
 - Ambos os usuários possuem um search para pesquisar o animal pelo nome.
 4) Amigos:
 - Ambos os usuários possuem dois botões no perfil, o de amigos e o de solicitações;
