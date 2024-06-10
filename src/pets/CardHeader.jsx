@@ -42,7 +42,7 @@ const CardHeader = ({
         Vacinas
       </button>
       {!isOwner && (
-        <div className="top-2 left-2 font-bold break-words w-3/4">
+        <div className="top-2 left-2 font-bold break-words w-3/5">
           Tutor: {card.userFullName}
         </div>
       )}

@@ -1,40 +1,45 @@
-import React, { useState } from 'react';
-import { storage } from '../firebase';
-import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
-import { database } from '../firebase';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { storage } from "../firebase";
+import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { database } from "../firebase";
+import { toast } from "react-toastify";
 
 const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
-  const [urlUploaded, setUrlUploaded] = useState('');
-  const [vaccineName, setVaccineName] = useState('');
-  const [vaccineDate, setVaccineDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-  const [veterinary, setVeterinary] = useState('');
-  const [crmv, setCrmv] = useState('');
+  const [vaccineURL, setVaccineURL] = useState("");
+  const [vaccineName, setVaccineName] = useState("");
+  const [vaccineDate, setVaccineDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
+  const [veterinary, setVeterinary] = useState("");
+  const [crmv, setCrmv] = useState("");
 
   const addVaccine = async () => {
     try {
-      await addDoc(collection(database, 'Vaccines'), {
+      await addDoc(collection(database, "Vaccines"), {
         cardId: card.id,
-        vaccineURL: urlUploaded,
-        vaccineDate: vaccineDate,
-        returnDate: returnDate,
-        veterinary: veterinary,
-        crmv: crmv,
+        vaccineURL,
+        vaccineName,
+        vaccineDate,
+        returnDate,
+        veterinary,
+        crmv,
       });
-      toast.success('Comprovante anexado com sucesso!', {
-        position: 'top-center',
+      toast.success("Comprovante anexado com sucesso!", {
+        position: "top-center",
       });
       fetchVaccines();
       toggleForm();
     } catch (error) {
-      console.error('Error adding document: ', error);
-      toast.error('Algum problema ocorreu no anexo do comprovante.', {
-        position: 'bottom-center',
+      console.error("Error adding document: ", error);
+      toast.error("Algum problema ocorreu no anexo do comprovante.", {
+        position: "bottom-center",
       });
     }
   };
+
+  const checkForm = () => {
+    return vaccineName && vaccineURL && vaccineDate && veterinary && crmv
+  }
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -42,19 +47,19 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {},
       (error) => {
         console.error(error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(setUrlUploaded);
+        getDownloadURL(uploadTask.snapshot.ref).then(setVaccineURL);
       }
     );
   };
 
   return (
-    <div className="flex flex-col bg-white p-4">
+    <>
       <label className="mb-4 text-black font-medium">
         Vacina:
         <input
@@ -119,12 +124,14 @@ const VaccineForm = ({ fetchVaccines, card, toggleForm }) => {
       <div className="mt-8 flex flex-col gap-y-4">
         <button
           onClick={addVaccine}
+          disabled={!checkForm()}
           type="button"
-          className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-400 text-white text-lg font-bold">
-          Cadastrar
+          className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-orange-300 hover:bg-orange-400 text-white text-lg font-bold"
+        >
+          Salvar
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
