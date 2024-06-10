@@ -52,13 +52,13 @@ const Vaccines = () => {
                 <button
                   onClick={() => toggleForm(!showForm)}
                   className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out 
-              py-3 rounded-xl bg-orange-300 hover:bg-orange-400 text-white text-lg font-bold p-2 my-4 h-16"
+              py-3 rounded-xl bg-orange-300 hover:bg-orange-400 text-white text-lg font-bold my-4 h-14 w-20"
                 >
                   Voltar
                 </button>
               </div>
             )}
-            <div className="w-full sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+            <div className="w-full sm:w-3/4 p-4">
               <VaccineForm
                 card={card}
                 fetchVaccines={fetchVaccines}
@@ -73,7 +73,7 @@ const Vaccines = () => {
                 <button
                   onClick={() => toggleForm(!showForm)}
                   className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out 
-              py-3 rounded-xl bg-orange-300 hover:bg-orange-400 text-white text-lg font-bold p-2 my-4 h-16"
+              py-3 rounded-xl bg-orange-300 hover:bg-orange-400 text-white text-lg font-bold my-4 h-14 w-20"
                 >
                   Anexar
                 </button>
