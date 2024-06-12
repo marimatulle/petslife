@@ -47,3 +47,32 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
 3) Crie uma carteira para cada pet, preenchendo as informações necessárias;
 4) Adicione o veterinário à sua conta;
 5) O veterinário fará o upload dos comprovantes de vacinação na carteira.
+## Setup:
+Para rodar o projeto no seu computador, siga os passos abaixo:
+- Clone o repositório e rode <b>npm install</b>;
+- Acesse o Firebase e logue com sua conta;
+- Dentro do Firebase, configure um banco de dados;
+- Copie suas credenciais do banco de dados criado e crie um arquivo chamado <b>firebase.js</b> no projeto;
+- Cole o seguinte trecho de código dentro dele (modifique para suas credenciais):
+```
+    import { initializeApp } from 'firebase/app';
+    import { getAuth } from 'firebase/auth';
+    import { getFirestore } from 'firebase/firestore';
+    import { getStorage } from 'firebase/storage';
+
+    const firebaseConfig = {
+      apiKey: 'sua_api_key',
+      authDomain: 'seu_dominio',
+      projectId: 'seu_projeto_id',
+      storageBucket: 'seu_storage_bucket',
+      messagingSenderId: 'seu_messaging_sender_id',
+      appId: 'seu_app_id',
+    };
+
+    export const app = initializeApp(firebaseConfig);
+    export const auth = getAuth(app);
+    export const database = getFirestore(app);
+    export const storage = getStorage(app);
+```
+- No seu banco de dados do Firebase, crie um <b>Authentication</b>, <b>Firestore Database</b> e <b>Storage</b>;
+- Após feito isso, rode o projeto com <b>npm start</b>.
