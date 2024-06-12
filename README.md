@@ -51,7 +51,7 @@ O objetivo principal do projeto é facilitar a vida dos tutores e veterinários,
 Para rodar o projeto no seu computador, siga os passos abaixo:
 - Clone o repositório e rode <b>npm install</b>;
 - Acesse o Firebase e logue com sua conta;
-- Dentro do Firebase, configure um banco de dados;
+- Dentro do Firebase, crie um banco de dados;
 - Copie suas credenciais do banco de dados criado e crie um arquivo chamado <b>firebase.js</b> no projeto;
 - Cole o seguinte trecho de código dentro dele (modifique para suas credenciais):
 ```
