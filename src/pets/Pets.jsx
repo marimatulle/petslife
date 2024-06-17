@@ -190,7 +190,7 @@ const Pets = () => {
                   { key: 'Raça', value: card.animalBreed },
                   { key: 'Sexo', value: card.animalSex },
                   { key: 'Idade', value: card.animalAge },
-                  { key: 'Idade', value: card.animalColor },
+                  { key: 'Cor', value: card.animalColor },
                   { key: 'Castrado', value: card.isNeutered },
                   {
                     key: 'Doenças pré-existentes',
