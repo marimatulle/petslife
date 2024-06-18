@@ -35,7 +35,7 @@ const FriendsModal = ({ onClose }) => {
         async (docSnapshot) => {
           const senderId = docSnapshot.data().senderId;
           const senderDocRef = doc(database, "RegularUsers", senderId);
-          const senderDocSnap = await getDoc(senderDocRef);
+          const senderDocSnap = await getDoc(senderDocRef); 
           if (senderDocSnap.exists()) {
             return {
               id: docSnapshot.id,
@@ -87,8 +87,8 @@ const FriendsModal = ({ onClose }) => {
 
       const receivedFriends = await Promise.all(receivedFriendsPromises);
       const sentFriends = await Promise.all(sentFriendsPromises);
-
-      setFriends([...receivedFriends, ...sentFriends]);
+      const friendshipRequests = [...receivedFriends, ...sentFriends].filter(item => item)
+      setFriends(friendshipRequests);
     };
 
     fetchFriends();
@@ -122,7 +122,7 @@ const FriendsModal = ({ onClose }) => {
                 </h3>
                 {friends.map((friend) => {
                   const profileId =
-                    friend.senderId === auth.currentUser.uid
+                    friend?.senderId === auth.currentUser.uid
                       ? friend.receiverId
                       : friend.senderId;
                   return (
